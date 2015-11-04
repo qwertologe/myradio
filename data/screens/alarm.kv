@@ -1,0 +1,215 @@
+ShowcaseScreen:
+  name: 'alarm'
+  fullscreen: True
+
+  RelativeLayout:
+    id: rl
+
+    BoxLayout:
+      orientation: 'vertical'
+
+      BoxLayout:
+        orientation: 'horizontal'
+
+        # weekdays
+        BoxLayout:
+          orientation: 'vertical'
+
+          GridLayout:
+            cols: 2
+
+            CheckBox:
+              active: app.alarm1_days & 1
+              on_active: app.set_alarm1_day(0,self.active)
+            Label:
+              text: app.weekday[0]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm1_days & 2
+              on_active: app.set_alarm1_day(1,self.active)
+            Label:
+              text: app.weekday[1]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm1_days & 4
+              on_active: app.set_alarm1_day(2,self.active)
+            Label:
+              text: app.weekday[2]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm1_days & 8
+              on_active: app.set_alarm1_day(3,self.active)
+            Label:
+              text: app.weekday[3]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm1_days & 16
+              on_active: app.set_alarm1_day(4,self.active)
+            Label:
+              text: app.weekday[4]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm1_days & 32
+              on_active: app.set_alarm1_day(5,self.active)
+            Label:
+              text: app.weekday[5]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm1_days & 64
+              on_active: app.set_alarm1_day(6,self.active)
+              size_hint_x: None
+            Label:
+              text: app.weekday[6]
+              font_size: min(self.height,self.width) * 0.8
+
+        # alarm hour+mins
+        BoxLayout:
+          orientation: 'vertical'
+          size_hint_x: 2
+
+          # alarm1
+          BoxLayout:
+            orientation: 'horizontal'
+
+            Label:
+              text: "%d:%02d" % (app.alarm1_h, app.alarm1_m)
+              font_size: self.height
+
+            Switch:
+              active: app.alarm1_active
+              on_active: app.alarm1_active = self.active
+
+            Label:
+              size_hint_x: None
+              size_x: 48
+
+          Slider:
+            orientation: 'horizontal'
+            min: 0
+            max: 23
+            step: 1
+            value: app.alarm1_h
+            on_value: app.alarm1_h = self.value
+
+          Slider:
+            orientation: 'horizontal'
+            min: 0
+            max: 59
+            step: 1
+            value: app.alarm1_m
+            on_value: app.alarm1_m = self.value
+
+      Label:
+        size_hint_y: 0.1
+
+      BoxLayout:
+        orientation: 'horizontal'
+
+        # weekdays
+        BoxLayout:
+          orientation: 'vertical'
+
+          GridLayout:
+            cols: 2
+
+            CheckBox:
+              active: app.alarm2_days & 1
+              on_active: app.set_alarm2_day(0,self.active)
+            Label:
+              text: app.weekday[0]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm2_days & 2
+              on_active: app.set_alarm2_day(1,self.active)
+            Label:
+              text: app.weekday[1]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm2_days & 4
+              on_active: app.set_alarm2_day(2,self.active)
+            Label:
+              text: app.weekday[2]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm2_days & 8
+              on_active: app.set_alarm2_day(3,self.active)
+            Label:
+              text: app.weekday[3]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm2_days & 16
+              on_active: app.set_alarm2_day(4,self.active)
+            Label:
+              text: app.weekday[4]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm2_days & 32
+              on_active: app.set_alarm2_day(5,self.active)
+            Label:
+              text: app.weekday[5]
+              font_size: min(self.height,self.width) * 0.8
+
+            CheckBox:
+              active: app.alarm2_days & 64
+              on_active: app.set_alarm2_day(6,self.active)
+              size_hint_x: None
+            Label:
+              text: app.weekday[6]
+              font_size: min(self.height,self.width) * 0.8
+
+        # alarm hour+mins
+        BoxLayout:
+          orientation: 'vertical'
+          size_hint_x: 2
+
+          # alarm2
+          BoxLayout:
+            orientation: 'horizontal'
+
+            Label:
+              text: "%d:%02d" % (app.alarm2_h, app.alarm2_m)
+              font_size: self.height
+
+            Switch:
+              active: app.alarm2_active
+              on_active: app.alarm2_active = self.active
+
+            Button:
+              size_hint_x: None
+              size_x: 48
+              background_color: 0.1,0.1,0.1,1
+              on_release: app.save_config()
+              disabled: app.post_save_cmd == ''
+              Image:
+                size_hint_y: None
+                source: 'data/icons/alarm/save-disabled.png' if self.disabled else 'data/icons/alarm/save.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+          Slider:
+            orientation: 'horizontal'
+            min: 0
+            max: 23
+            step: 1
+            value: app.alarm2_h
+            on_value: app.alarm2_h = self.value
+
+          Slider:
+            orientation: 'horizontal'
+            min: 0
+            max: 55
+            step: 5
+            value: app.alarm2_m
+            on_value: app.alarm2_m = self.value
+

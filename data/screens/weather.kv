@@ -1,0 +1,1348 @@
+#:import math math
+#:import webbrowser webbrowser
+ShowcaseScreen:
+  name: 'weather'
+  fullscreen: True
+
+  BoxLayout:
+    orientation: 'vertical'
+
+    # today
+    FloatLayout:
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[0], app.sunhour_y[0])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(0)
+
+        Label:
+          text: app.weather_temp[0]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[0]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[0]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[1], app.sunhour_y[1])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(1)
+
+        Label:
+          text: app.weather_temp[1]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[1]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[1]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[2], app.sunhour_y[2])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(2)
+
+        Label:
+          text: app.weather_temp[2]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[2]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[2]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[3], app.sunhour_y[3])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(3)
+
+        Label:
+          text: app.weather_temp[3]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[3]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[3]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[4], app.sunhour_y[4])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(4)
+
+        Label:
+          text: app.weather_temp[4]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[4]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[4]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[5], app.sunhour_y[5])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(5)
+
+        Label:
+          text: app.weather_temp[5]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[5]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[5]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[6], app.sunhour_y[6])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(6)
+
+        Label:
+          text: app.weather_temp[6]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[6]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[6]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[7], app.sunhour_y[7])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(7)
+
+        Label:
+          text: app.weather_temp[7]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[7]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[7]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[8], app.sunhour_y[8])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(8)
+
+        Label:
+          text: app.weather_temp[8]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[8]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[8]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[9], app.sunhour_y[9])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(9)
+
+        Label:
+          text: app.weather_temp[9]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[9]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[9]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[10], app.sunhour_y[10])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(10)
+
+        Label:
+          text: app.weather_temp[10]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[10]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[10]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[11], app.sunhour_y[11])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(11)
+
+        Label:
+          text: app.weather_temp[11]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[11]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[11]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[12], app.sunhour_y[12])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(12)
+
+        Label:
+          text: app.weather_temp[12]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[12]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[12]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[13], app.sunhour_y[13])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(13)
+
+        Label:
+          text: app.weather_temp[13]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[13]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[13]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[14], app.sunhour_y[14])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(14)
+
+        Label:
+          text: app.weather_temp[14]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[14]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[14]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[15], app.sunhour_y[15])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(15)
+
+        Label:
+          text: app.weather_temp[15]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[15]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[15]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[16], app.sunhour_y[16])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(16)
+
+        Label:
+          text: app.weather_temp[16]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[16]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[16]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[17], app.sunhour_y[17])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(17)
+
+        Label:
+          text: app.weather_temp[17]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[17]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[17]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[18], app.sunhour_y[18])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(18)
+
+        Label:
+          text: app.weather_temp[18]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[18]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[18]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[19], app.sunhour_y[19])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(19)
+
+        Label:
+          text: app.weather_temp[19]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[19]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[19]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[20], app.sunhour_y[20])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(20)
+
+        Label:
+          text: app.weather_temp[20]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[20]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[20]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[21], app.sunhour_y[21])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(21)
+
+        Label:
+          text: app.weather_temp[21]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[21]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[21]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[22], app.sunhour_y[22])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(22)
+
+        Label:
+          text: app.weather_temp[22]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[22]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[22]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[23], app.sunhour_y[23])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(23)
+
+        Label:
+          text: app.weather_temp[23]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[23]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[23]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+    # scale
+    FloatLayout:
+      size_hint_y: None
+      size_y: dp(15)
+
+      Button:
+        on_press: webbrowser.open("http://forecast.io/")
+        text: 'Powered by Forecast.io'
+        size_hint: None, None
+        size: self.parent.width, dp(15)
+        background_color: 0,0,0,0
+
+      Label:
+        text: '00:00'
+        pos_hint: {'center': (app.sunhour_x[0], 0.5)}
+      Label:
+        text: '03:00'
+        pos_hint: {'center': (app.sunhour_x[3], 0.5)}
+      Label:
+        text: '06:00'
+        pos_hint: {'center': (app.sunhour_x[6], 0.5)}
+      Label:
+        text: '09:00'
+        pos_hint: {'center': (app.sunhour_x[9], 0.5)}
+      Label:
+        text: '12:00'
+        pos_hint: {'center': (app.sunhour_x[12], 0.5)}
+      Label:
+        text: '15:00'
+        pos_hint: {'center': (app.sunhour_x[15], 0.5)}
+      Label:
+        text: '18:00'
+        pos_hint: {'center': (app.sunhour_x[18], 0.5)}
+      Label:
+        text: '21:00'
+        pos_hint: {'center': (app.sunhour_x[21], 0.5)}
+
+    # tomorrow
+    FloatLayout:
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[0], app.sunhour_y[0])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(24)
+
+        Label:
+          text: app.weather_temp[24]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[24]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[24]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[1], app.sunhour_y[1])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(25)
+
+        Label:
+          text: app.weather_temp[25]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[25]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[25]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[2], app.sunhour_y[2])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(26)
+
+        Label:
+          text: app.weather_temp[26]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[26]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[26]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[3], app.sunhour_y[3])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(27)
+
+        Label:
+          text: app.weather_temp[27]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[27]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[27]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[4], app.sunhour_y[4])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(28)
+
+        Label:
+          text: app.weather_temp[28]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[28]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[28]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[5], app.sunhour_y[5])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(29)
+
+        Label:
+          text: app.weather_temp[29]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[29]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[29]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[6], app.sunhour_y[6])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(30)
+
+        Label:
+          text: app.weather_temp[30]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[30]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[30]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[7], app.sunhour_y[7])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(31)
+
+        Label:
+          text: app.weather_temp[31]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[31]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[31]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[8], app.sunhour_y[8])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(32)
+
+        Label:
+          text: app.weather_temp[32]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[32]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[32]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[9], app.sunhour_y[9])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(33)
+
+        Label:
+          text: app.weather_temp[33]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[33]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[33]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[10], app.sunhour_y[10])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(34)
+
+        Label:
+          text: app.weather_temp[34]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[34]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[34]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[11], app.sunhour_y[11])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(35)
+
+        Label:
+          text: app.weather_temp[35]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[35]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[35]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[12], app.sunhour_y[12])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(36)
+
+        Label:
+          text: app.weather_temp[36]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[36]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[36]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[13], app.sunhour_y[13])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(37)
+
+        Label:
+          text: app.weather_temp[37]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[37]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[37]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[14], app.sunhour_y[14])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(38)
+
+        Label:
+          text: app.weather_temp[38]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[38]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[38]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[15], app.sunhour_y[15])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(39)
+
+        Label:
+          text: app.weather_temp[39]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[39]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[39]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[16], app.sunhour_y[16])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(40)
+
+        Label:
+          text: app.weather_temp[40]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[40]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[40]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[17], app.sunhour_y[17])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(41)
+
+        Label:
+          text: app.weather_temp[41]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[41]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[41]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[18], app.sunhour_y[18])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(42)
+
+        Label:
+          text: app.weather_temp[42]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[42]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[42]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[19], app.sunhour_y[19])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(43)
+
+        Label:
+          text: app.weather_temp[43]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[43]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[43]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[20], app.sunhour_y[20])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(44)
+
+        Label:
+          text: app.weather_temp[44]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[44]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[44]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[21], app.sunhour_y[21])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(45)
+
+        Label:
+          text: app.weather_temp[45]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[45]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[45]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[22], app.sunhour_y[22])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(46)
+
+        Label:
+          text: app.weather_temp[46]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[46]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[46]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+
+      Button:
+        pos_hint: {'center': (app.sunhour_x[23], app.sunhour_y[23])}
+        size_hint: None, None
+        size: app.iconsize, app.iconsize * 3
+        background_color: 0,0,0,0
+        on_press: app.weather_details(47)
+
+        Label:
+          text: app.weather_temp[47]
+          markup: True
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y + app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+        Image:
+          source: app.weather_icons[47]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y
+          size_hint: None, None
+          size: app.iconsize, app.iconsize
+        Label:
+          text: app.weather_prob[47]
+          center_x: self.parent.center_x
+          center_y: self.parent.center_y - app.iconsize
+          size_hint: None, None
+          size: app.iconsize, app.iconsize / 2
+

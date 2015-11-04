@@ -1,0 +1,24 @@
+ShowcaseScreen:
+  name: 'system'
+  fullscreen: True
+
+  BoxLayout:
+
+    Button:
+      background_color: 0.1,0.1,0.1,1
+      on_release: app.reboot()
+      Image:
+        size_hint_y: None
+        source: 'data/icons/system/reboot.png'
+        center_x: self.parent.center_x
+        center_y: self.parent.center_y
+
+    Button:
+      background_color: 0.1,0.1,0.1,1
+      on_release: app.shutdown()
+      Image:
+        size_hint_y: None
+        source: 'data/icons/system/shutdown.png'
+        center_x: self.parent.center_x
+        center_y: self.parent.center_y
+

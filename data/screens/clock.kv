@@ -1,0 +1,87 @@
+#:import random random
+ShowcaseScreen:
+  name: 'clock'
+  fullscreen: True
+  on_enter: app.alarm_type = 'analog'
+  c: [1,1,1]
+  radius: min(self.width, self.height) / 2.5
+
+  FloatLayout:
+    Label:
+      text: app.alarm1_lag if app.alarm1_lag < app.alarm2_lag else app.alarm2_lag
+      pos_hint: {'center': (0.95, 0.05)}
+      color: 0.3,0.3,0.3,1
+
+    Widget:
+      on_touch_down:
+        root.c=random.choice([
+        [0.47,0.98,0.42],
+        [0.11,0.62,0.98],
+        [0.98,0.52,0.01],
+        [0.78,0.37,0.61],
+        [0.91,0.86,0.22],
+        [1,1,1]
+        ])
+      pos_hint: {'center': (.5, .5)}
+      size: min(root.size), min(root.size)
+      size_hint: None, None
+
+      canvas:
+
+# clock
+        Color:
+          rgb: root.c[0]*0.3,root.c[1]*0.3,root.c[2]*0.3
+        Line:
+          width: 3.
+          circle: self.center_x+root.radius, self.center_y, 3
+        Line:
+          width: 3.
+          circle: self.center_x-root.radius, self.center_y, 3
+        Line:
+          width: 3.
+          circle: self.center_x, self.center_y+root.radius, 3
+        Line:
+          width: 3.
+          circle: self.center_x, self.center_y-root.radius, 3
+        Point:
+          points:
+            [
+            self.center_x+app.digit_x[1]*root.radius,
+            self.center_y+app.digit_y[1]*root.radius,
+            self.center_x+app.digit_x[2]*root.radius,
+            self.center_y+app.digit_y[2]*root.radius,
+            self.center_x+app.digit_x[4]*root.radius,
+            self.center_y+app.digit_y[4]*root.radius,
+            self.center_x+app.digit_x[5]*root.radius,
+            self.center_y+app.digit_y[5]*root.radius,
+            self.center_x+app.digit_x[7]*root.radius,
+            self.center_y+app.digit_y[7]*root.radius,
+            self.center_x+app.digit_x[8]*root.radius,
+            self.center_y+app.digit_y[8]*root.radius,
+            self.center_x+app.digit_x[10]*root.radius,
+            self.center_y+app.digit_y[10]*root.radius,
+            self.center_x+app.digit_x[11]*root.radius,
+            self.center_y+app.digit_y[11]*root.radius,
+            ]
+
+# sec
+        Color:
+          rgb: root.c[0]*0.3,root.c[1]*0.3,root.c[2]*0.3
+        SmoothLine:
+          width: 1.
+          points: [self.center_x, self.center_y,self.center_x+app.second_x*root.radius*0.8,self.center_y+app.second_y*root.radius*0.8]
+
+# min
+        Color:
+          rgb: root.c[0]*0.6,root.c[1]*0.6,root.c[2]*0.6
+        SmoothLine:
+          width: 2.
+          points: [self.center_x, self.center_y,self.center_x+app.minute_x*root.radius*0.8,self.center_y+app.minute_y*root.radius*0.8]
+
+# hour
+        Color:
+          rgb: root.c[0],root.c[1],root.c[2]
+        SmoothLine:
+          width: 3.
+          points: [self.center_x, self.center_y,self.center_x+app.hour_x*root.radius*0.6,self.center_y+app.hour_y*root.radius*0.6]
+

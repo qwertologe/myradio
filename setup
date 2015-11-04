@@ -1,0 +1,41 @@
+#!/bin/sh
+
+echo "### untested - remove 'exit' on your own risk"
+
+echo "This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details."
+
+exit
+
+echo "### vontaene"
+deb http://vontaene.de/raspbian-updates/ . main
+gpg --recv-keys 0C667A3E
+gpg -a --export 0C667A3E | sudo apt-key add -
+
+echo "### upgrade"
+sudo apt-get update
+sudo apt-get upgrade -y
+
+echo "### install"
+sudo apt-get install -y pkg-config libgl1-mesa-dev libgles2-mesa-dev \
+   python-pygame python-setuptools libgstreamer1.0-dev git-core \
+   gstreamer1.0-plugins-{bad,base,good,ugly} \
+   gstreamer1.0-{omx,alsa} python-dev \
+   fonts-droid # clock
+
+echo "### pip"
+wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+sudo python get-pip.py
+
+echo "### all pip packages ..."
+sudo pip install cython pygments docutils python-forecastio pytz tzlocal
+
+echo "### kivy"
+git clone https://github.com/kivy/kivy
+cd kivy
+python setup.py build
+
+echo "### kivy install"
+sudo python setup.py install

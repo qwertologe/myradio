@@ -1,0 +1,630 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+'''
+myRadio - an alarm clock with a simple audio player and weather forecast
+Copyright (C) 2015  Michael Arlt, GPL3 or higher
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
+from kivy.core.audio import SoundLoader
+from datetime import datetime,date,timedelta
+from os import path, system, listdir
+from sys import argv
+from random import choice
+import forecastio
+from pytz import timezone,utc
+from tzlocal import get_localzone
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
+from kivy.uix.actionbar import ActionToggleButton,ActionSeparator
+from functools import partial
+
+from time import time
+from kivy.app import App
+from os.path import basename, dirname, join, isfile, isdir, exists
+from kivy.lang import Builder
+from kivy.properties import NumericProperty, StringProperty, BooleanProperty,\
+    ListProperty, ConfigParserProperty
+from kivy.clock import Clock
+from kivy.animation import Animation
+from kivy.uix.screenmanager import Screen
+from math import sin, cos, pi
+from locale import setlocale, LC_ALL
+from os.path import expandvars
+
+from kivy.config import ConfigParser
+
+
+class ShowcaseScreen(Screen):
+    fullscreen = BooleanProperty(False)
+    radius = NumericProperty(64)
+
+    def add_widget(self, *args):
+        if 'content' in self.ids:
+            return self.ids.content.add_widget(*args)
+        return super(ShowcaseScreen, self).add_widget(*args)
+
+class ShowcaseApp(App):
+
+    # showcase base
+    index = NumericProperty(-1)
+    current_title = StringProperty()
+    time = NumericProperty(0)
+    screen_names = ListProperty([])
+    hierarchy = ListProperty([])
+
+    # clock
+    clock = StringProperty('00:00')
+    hour_x = NumericProperty(0)
+    hour_y = NumericProperty(0)
+    minute_x = NumericProperty(0)
+    minute_y = NumericProperty(0)
+    second_x = NumericProperty(0)
+    second_y = NumericProperty(0)
+    digit_x = [None]
+    digit_y = [None]
+
+    # weather
+    sunhour_x = []
+    sunhour_y = []
+    iconsize = 32
+    all_weather_icons = ['clear-day','clear-night','cloudy','fog','hail','partly-cloudy-day','partly-cloudy-night','rain','sleet','snow','thunderstorm','tornado','weather-showers-scattered','wind']
+    weather_icons = ListProperty([])
+    weather_temp = ListProperty([])
+    weather_prob = ListProperty([])
+    weather_summary = ListProperty([])
+
+    # workaround https://github.com/kivy/kivy/issues/2643
+    def configbool(value):
+        if isinstance(value, basestring):
+            return value.lower() not in ('false', 'no', '')
+        return bool(value)
+
+    # configuration file
+    config = ConfigParser(name='myradio')
+    if len(argv) > 1:
+        config.read(argv[1])
+    else:
+        config.read("myradio.ini")
+
+    # alarm settings from configuration file
+    alarm1_active = ConfigParserProperty(False, 'alarm1', 'active', 'myradio', val_type=configbool)
+    alarm2_active = ConfigParserProperty(False, 'alarm2', 'active', 'myradio', val_type=configbool)
+    alarm1_h = ConfigParserProperty(7, 'alarm1', 'hour', 'myradio', val_type=int)
+    alarm2_h = ConfigParserProperty(9, 'alarm2', 'hour', 'myradio', val_type=int)
+    alarm1_m = ConfigParserProperty(0, 'alarm1', 'minute', 'myradio', val_type=int)
+    alarm2_m = ConfigParserProperty(0, 'alarm2', 'minute', 'myradio', val_type=int)
+    alarm1_days = ConfigParserProperty(31, 'alarm1', 'days', 'myradio', val_type=int)
+    alarm2_days = ConfigParserProperty(96, 'alarm2', 'days', 'myradio', val_type=int)
+    alarm_dir={}
+    alarm_dir['analog'] = config.getdefault('alarm', 'analog_dir', 'analog')
+    alarm_dir['digital'] = config.getdefault('alarm', 'digital_dir', 'analog')
+    snooze_seconds = int(config.getdefault('alarm', 'snooze_seconds', 60))
+
+    # alarm variables
+    alarm_type = StringProperty('digital') # maybe changed from kv-files
+    alarm1_lag = StringProperty('')
+    alarm2_lag = StringProperty('')
+    alarm1_text = StringProperty('                     ')
+    alarm2_text = StringProperty('                     ')
+
+    # audio settings from configuration file
+    #audiorootdir = expandvars(config.getdefault('audio', 'dir', '$HOME'))
+    audiorootdirs = [i for i in expandvars(config.getdefault('audio', 'dirs', '$HOME')).split(',')]
+    audiorootdir = audiorootdirs[0]
+    audioformats = ['.{0}'.format(i) for i in config.getdefault('audio', 'formats', 'flac mp3 ogg').split(',')]
+
+    # alarm variables
+    audiodir = StringProperty(None)
+    audio_playing_file = None
+    audio_playing_dir = None
+    audiofiles = ListProperty([])
+    audioformat = [None]
+    volume = NumericProperty(0.5)
+    audiolength = NumericProperty(0)
+    audioprogress = NumericProperty(0)
+    audioindex = NumericProperty(0)
+    sound = None
+    sleeptimer = NumericProperty(0)
+    sleeptimer_start = None
+    sleeptimer_minutes = None
+    is_playing = False
+    last_set_audioprogress = None
+    alarm1 = None
+    alarm2 = None
+
+    # audio settings from configuration file
+    latitude = config.getdefault('weather', 'latitude', '52.370235')
+    longitude = config.getdefault('weather', 'longitude', '4.903549')
+    apikey = config.getdefault('weather', 'apikey', None)
+    language = config.getdefault('weather', 'language', 'en')
+
+    # system settings from configuration file
+    monofont = config.getdefault('system', 'monofont', 'DroidSansMono')
+    post_save_cmd = config.getdefault('system', 'post_save_cmd', '')
+    reboot_cmd = config.getdefault('system', 'reboot', 'sudo /sbin/reboot')
+    shutdown_cmd = config.getdefault('system', 'shutdown', 'sudo /sbin/halt')
+    available_screens = (config.getdefault('system', 'screens', 'player,clock,alarm,weather,system').split(','))
+
+    # locale
+    weekday = []
+    setlocale(LC_ALL, '') # activates the current configured locale - do not remove
+
+    def build(self):
+
+        # audio
+        self.audio_cd(self.audiorootdir)
+
+        # calculate digit positions for analog clock
+        for i in range(1,13):
+            self.digit_x.append(cos((3-i)*30*pi/180.0))
+            self.digit_y.append(sin((3-i)*30*pi/180.0))
+        # calculate sun 'position'
+        base = "data/icons/weather/{}/".format(self.iconsize)
+        for h in range(24):
+            self.sunhour_x.append(1*h/24.+1/48.)
+            self.sunhour_y.append(sin(pi*h/23)*0.5+0.25)
+            self.weather_icons.append(base+'unset.png')
+            self.weather_icons.append(base+'unset.png')
+            self.weather_temp.append('')
+            self.weather_temp.append('')
+            self.weather_prob.append('')
+            self.weather_prob.append('')
+            self.weather_summary.append('')
+            self.weather_summary.append('')
+        # localized weekdays
+        for i in range(7):
+          self.weekday.append(date(2015,10,5+i).strftime('%A'))
+
+        self.title = 'myRadio'
+        Clock.schedule_interval(self._update_clock, 1 / 60.)
+        self.screens = {}
+        self.screen_names = self.available_screens
+        curdir = dirname(__file__)
+        self.available_screens = [join(curdir, 'data', 'screens',
+            '{}.kv'.format(fn)) for fn in self.available_screens]
+        self.update_alarm1()
+        self.update_alarm2()
+        self.update_weather()
+        self.update_all()
+
+        for idx,screen in enumerate(self.screen_names):
+            self.root.ids.av.add_widget(
+                ActionToggleButton(
+                    text=screen,
+                    id=screen,
+                    icon='data/screens/'+ screen + '.png',
+                    on_release=partial(self.go_screen_helper,idx),
+                )
+            )
+        self.go_screen_helper(0)
+
+    def go_screen_helper(self,toggle_idx,_sender=None):
+
+        for idx,widget in enumerate(self.root.ids.av.children):
+            if widget.id in self.screen_names:
+                if widget.id == self.screen_names[toggle_idx]:
+                    widget.state='down'
+                else:
+                    widget.state='normal'
+
+        if self.index != toggle_idx:
+            self.go_screen(toggle_idx)
+
+    def weather_details(self,hour):
+        popup = Popup(title='weather details ('+str(hour % 24)+':00)', content=Label(text=self.weather_summary[hour]), size_hint=(None, None), size=(320, 200))
+        popup.open()
+
+    def on_pause(self):
+        return True
+
+    def on_resume(self):
+        pass
+
+    def go_screen(self, idx, ignore=True):
+        self.index = idx
+        self.root.ids.sm.switch_to(self.load_screen(idx), direction='left')
+
+    def go_screen_name(self, name):
+        for idx, item in enumerate(self.available_screens):
+            if item.endswith("/{}.kv".format(name)):
+                self.go_screen_helper(idx)
+                return True
+
+    def load_screen(self, index):
+        if index in self.screens:
+            return self.screens[index]
+        screen = Builder.load_file(self.available_screens[index].lower())
+        self.screens[index] = screen
+        return screen
+
+    def sound_pause(self):
+        if self.sound != None:
+            if self.sound.state == 'play':
+                self.is_playing = False
+                self.sound.stop()
+            else:
+                seconds = self.last_set_audioprogress
+                self.sound.play()
+                self.audioprogress = seconds
+                self.sound.seek(seconds)
+                self.is_playing = True
+
+
+    def request_sound(self,path):
+
+        audiofile = (self.audiodir + '/' + path).encode("utf-8")
+
+        if isfile(audiofile):
+            self.sound_stop()
+            self.sound = SoundLoader.load(audiofile)
+            if self.sound:
+                if self.sound.length >= 0:
+                    self.audio_playing_file = path
+                    self.audio_playing_dir = self.audiodir
+                    self.audiolength = self.sound.length
+                    self.sound.volume = self.volume
+                    self.sound.play()
+                    self.is_playing = True
+                    return True
+
+                layout = BoxLayout(orientation='vertical')
+                layout.add_widget(Label(text="Loading failed for:\n" + audiofile))
+                close=Button(text=':-(', font_size=30, size_hint=(1,0.2))
+                layout.add_widget(close)
+                popup = Popup(title='Problems - sorry ...', content=layout, auto_dismiss=False)
+                close.bind(on_release=popup.dismiss)
+                popup.open()
+
+    def sound_stop(self):
+        #self.alarm()
+        if self.sound:
+            self.is_playing = False
+            self.sound.stop()
+            self.sound = None
+
+    def seek(self,seconds):
+        if self.sound:
+            self.sound.seek(self.sound.get_pos()+seconds)
+
+    def jump(self,seconds):
+        if seconds != self.last_set_audioprogress and self.sound:
+            self.sound.seek(seconds)
+
+    def skip(self,count):
+        if self.sound:
+            try:
+                self.audio_cd(self.audio_playing_dir)
+                index = self.audiofiles.index(basename(self.audio_playing_file)) + count
+                if 0 <= index < (len(self.audiofiles)):
+                    self.request_sound(self.audiofiles[index])
+                    self.audioindex = index
+                    #sm.listview.adapter.select_list([sm.listview.adapter.get_view(index)])
+
+            except:
+                pass
+
+    def set_volume(self,volume):
+
+        self.volume = volume
+        try:
+            self.sound.volume = volume
+        except:
+            pass
+
+    def audio_cd(self,path):
+
+        if path[0] == '/':
+            self.audiorootdir = path
+            newdir = path
+        elif path == '..':
+            if len(self.audiodir) > len(self.audiorootdir):
+                newdir = dirname(self.audiodir)
+            else:
+                return
+        else:
+            newdir = self.audiodir + '/' + path
+
+        if isdir(newdir):
+            self.audiodir = newdir
+            self.audiofiles = sorted([ a for a in listdir(newdir) if isdir(join(newdir,a)) or a.endswith(tuple(self.audioformats)) ])
+
+    def set_sleeptimer(self,minutes):
+
+        self.sleeptimer = minutes
+        self.sleeptimer_start = datetime.now()
+        self.sleeptimer_minutes = minutes
+
+    def days_hours_minutes(self, td):
+        return td.days, td.seconds//3600, (td.seconds//60)%60
+
+    def alarm(self):
+
+        if self.sound and self.sound.state == 'play':
+            self.sound_pause()
+
+        path = self.alarm_dir[self.alarm_type]
+        if path[:1] != '/':
+            path = 'data/alarms/' + path
+
+        alarm_file = path + '/' + choice([ a for a in listdir(path) if isdir(join(path,a)) or a.endswith(tuple(self.audioformats)) ])
+        alarm_sound = SoundLoader.load(alarm_file);
+        popup = None
+
+        def alarm_steady(*t):
+
+            if alarm_sound:
+                alarm_sound.play()
+            snooze_seconds = self.snooze_seconds
+
+            layout = BoxLayout(size_hint=(1,1))
+            layout.add_widget(Label())
+            button_alarm_off=Button(
+                size=(256,256),
+                size_hint=(None,None),
+                pos_hint={'x': .5, 'center_y': .5},
+                background_normal='data/icons/alarm/off.png',
+            )
+            layout.add_widget(button_alarm_off)
+            layout.add_widget(Label())
+            button_alarm_snooze=Button(
+                size=(256,256),
+                size_hint=(None,None),
+                pos_hint={'x': .5, 'center_y': .5},
+                background_normal='data/icons/alarm/snooze.png',
+            )
+            layout.add_widget(button_alarm_snooze)
+            layout.add_widget(Label())
+            popup = Popup(title=datetime.now().strftime("Alarm - %H:%M"), content=layout)
+            def alarm_off(self):
+                if alarm_sound.state == 'play':
+                    alarm_sound.unbind()
+                    alarm_sound.stop()
+                    alarm_sound.unload()
+                Clock.unschedule(alarm_steady)
+                popup.dismiss()
+                return True
+
+            def alarm_snooze(self):
+                if alarm_sound.state == 'play':
+                    alarm_sound.unbind()
+                    alarm_sound.stop()
+                popup.dismiss()
+                Clock.schedule_once(alarm_steady, snooze_seconds)
+
+            alarm_sound.bind(on_stop=alarm_snooze)
+            button_alarm_off.bind(on_release=alarm_off)
+            button_alarm_snooze.bind(on_release=alarm_snooze)
+            popup.open()
+
+        Clock.schedule_once(alarm_steady)
+
+
+    def update_all(self):
+
+        def update_all_steady(*t):
+
+            # clock
+            clock = datetime.now().strftime("%H:%M")
+            now = datetime.now()
+            if clock != self.clock:
+                self.clock = now.strftime("%H:%M")
+            self.hour_x = cos((30 * (3-((now.hour+now.minute/60.0)%12)) + 360) * pi / 180.0)
+            self.hour_y = sin((30 * (3-((now.hour+now.minute/60.0)%12)) + 360) * pi / 180.0)
+            self.minute_x = cos((6 * (15-now.minute-now.second/60.0) + 360) * pi / 180.0)
+            self.minute_y = sin((6 * (15-now.minute-now.second/60.0) + 360) * pi / 180.0)
+            self.second_x = cos((6 * (15-now.second) + 360) * pi / 180.0)
+            self.second_y = sin((6 * (15-now.second) + 360) * pi / 180.0)
+
+            # audio
+            if self.sound:
+                if self.sound.state == 'play':
+                    audioprogress = self.sound.get_pos()
+                    self.last_set_audioprogress = audioprogress
+                    self.audioprogress = audioprogress
+                else:
+                    if self.is_playing:
+                        self.skip(1)
+            else:
+                if self.audioprogress != 0:
+                    self.audioprogress = 0
+
+            # sleeptimer
+            if self.sleeptimer > 0:
+                minutes = self.sleeptimer_minutes - int((datetime.now() - self.sleeptimer_start).total_seconds() / 60)
+                if minutes != self.sleeptimer:
+                    if self.sleeptimer == 1:
+                        self.sound_stop()
+                    self.sleeptimer = minutes
+
+            # alarm1
+            now = datetime.now()
+            if self.alarm1 != None:
+                if now >= self.alarm1:
+                    self.update_alarm1()
+                    self.alarm();
+                else:
+                    lag = self.alarm1 - now
+                    days, hours, minutes = self.days_hours_minutes(lag)
+                    self.alarm1_lag = "{}+{:02d}:{:02d}".format(days, hours, minutes)
+            else:
+                self.alarm1_lag = "======="
+            # alarm2
+            if self.alarm2:
+                if now >= self.alarm2:
+                    self.update_alarm2()
+                    self.alarm();
+                else:
+                    lag = self.alarm2 - now
+                    days, hours, minutes = self.days_hours_minutes(lag)
+                    self.alarm2_lag = "{}+{:02d}:{:02d}".format(days, hours, minutes)
+            else:
+                self.alarm2_lag = "======="
+
+            Clock.schedule_once(update_all_steady, 1)
+
+        Clock.schedule_once(update_all_steady)
+
+    def _update_clock(self, dt):
+        self.time = time()
+
+    def calc_alarm(self, active, hour, minute, days):
+
+        # 1234567
+        dates = ''
+        for bit in range(7):
+            if days >> bit & 1:
+                dates += `bit+1`
+            else:
+                dates += '='
+            days >> 1
+
+        now = datetime.now() + timedelta(minutes=1) # ensure selection of next alarm
+        nday = now.weekday()
+        alarm = None
+
+        # alarm
+        if active:
+            for day in range(nday,7) + range(0,nday):
+                if days >> day & 1:
+                    day_offset = (day-nday+7) % 7
+                    talarm = (now + timedelta(days=day_offset)).replace(hour=hour, minute=minute, second=0)
+                    if talarm > now:
+                        alarm = talarm
+                        break
+        alarm_text = "{} {:02d}:{:02d}".format(dates, hour, minute)
+        return alarm_text, alarm
+
+    def update_alarm1(self):
+        self.alarm1_text, self.alarm1 = self.calc_alarm(self.alarm1_active, self.alarm1_h, self.alarm1_m, self.alarm1_days)
+
+    def update_alarm2(self):
+        self.alarm2_text, self.alarm2 = self.calc_alarm(self.alarm2_active, self.alarm2_h, self.alarm2_m, self.alarm2_days)
+
+    def new_alarm_days(self,alarm_days,day,active):
+        mask = 1 << day
+        alarm_days &= ~mask
+        if active:
+            return alarm_days | mask
+        else:
+            return alarm_days
+
+    def set_alarm1_day(self,day,active):
+        self.alarm1_days = self.new_alarm_days(self.alarm1_days,day,active)
+    def set_alarm2_day(self,day,active):
+        self.alarm2_days = self.new_alarm_days(self.alarm2_days,day,active)
+
+    # extra Funktionen, da das Setzen mit automatischem Callback global nicht funktioniert
+    def on_alarm1_active(self, instance, value):
+        self.update_alarm1()
+    def on_alarm2_active(self, instance, value):
+        self.update_alarm2()
+    def on_alarm1_h(self, instance, value):
+        self.update_alarm1()
+    def on_alarm1_m(self, instance, value):
+        self.update_alarm1()
+    def on_alarm2_h(self, instance, value):
+        self.update_alarm2()
+    def on_alarm2_m(self, instance, value):
+        self.update_alarm2()
+    def on_alarm1_days(self, instance, value):
+        self.update_alarm1()
+    def on_alarm2_days(self, instance, value):
+        self.update_alarm2()
+
+    def update_weather(self):
+
+        def update_weather_steady(*t):
+
+            url = "https://api.forecast.io/forecast/{}/{},{}?lang={}&units=auto".format(self.apikey, self.latitude, self.longitude, self.language)
+            base = "data/icons/weather/{}/".format(self.iconsize)
+            local_tz = get_localzone()
+
+            # forecast
+            try:
+                forecast = forecastio.manual(url)
+                #forecast = forecastio.load_forecast(self.apikey, self.latitude, self.longitude)
+            except:
+                return
+
+            # reset
+            for h in range(48):
+                self.weather_icons[h] = base+'unset.png'
+                self.weather_temp[h] = ''
+                self.weather_prob[h] = ''
+                self.weather_summary[h] = ''
+
+            lasthour = -1
+            day_offset = 0
+            previous = []
+
+            for f in forecast.hourly().data:
+
+                localtime = local_tz.normalize(f.time.replace(tzinfo=utc).astimezone(local_tz))
+                hour = localtime.hour
+                if hour < lasthour:
+                    if day_offset > 0:
+                        break
+                    day_offset=24
+                lasthour = hour
+
+
+                if previous and (previous[0] == f.icon and previous[1] == f.summary):
+                    icon = base+'disabled.png'
+                else:
+                    icon = base+f.icon+'.png'
+                    if not exists(icon):
+                        icon = base+'unknown.png'
+                self.weather_icons[hour+day_offset] = icon
+
+                temperature=int(round(f.temperature))
+                if previous and previous[2] == temperature:
+                    self.weather_temp[hour+day_offset] = ''
+                else:
+                    if temperature <= 0:
+                        marker_on,marker_off = '[b]','[/b]'
+                    else:
+                        marker_on,marker_off = '',''
+                    self.weather_temp[hour+day_offset] = "{}{}°{}".format(marker_on,temperature,marker_off)
+
+                probability = int(round(f.precipProbability * 100))
+                if previous and previous[3] == probability:
+                    self.weather_prob[hour+day_offset] = ''
+                else:
+                    self.weather_prob[hour+day_offset] = "{}%".format(int(round(f.precipProbability * 100)))
+
+                self.weather_summary[hour+day_offset] = f.summary
+                previous = [f.icon,f.summary,temperature,probability]
+
+            Clock.schedule_once(update_weather_steady, 3600)
+
+        if self.apikey:
+            Clock.schedule_once(update_weather_steady)
+
+    def save_config(self):
+        system(self.post_save_cmd)
+
+    def reboot(self):
+        system(self.reboot_cmd)
+    def shutdown(self):
+        system(self.shutdown_cmd)
+
+if __name__ == '__main__':
+    ShowcaseApp().run()

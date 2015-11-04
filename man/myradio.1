@@ -1,0 +1,324 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "MYRADIO" "1" "November 2015" "" ""
+.
+.SH "NAME"
+\fBmyradio\fR \- An alarm clock with a simple audio player and weather forecast
+.
+.SH "SYNOPSIS"
+\fBmyradio\fR [path_to_configfile\.ini]
+.
+.SH "DESCRIPTION"
+A highly configurable alarm clock with support for playing audio files from your filesystem and weather forecast from forecast\.io\. All works without X \- framebuffer is enough\.
+.
+.P
+You can configure which KV\-screens you want to see \fICONFIGURATION\fR\. It may be possible, that a screen references another \- e\.g\. \'player\' has a link to \'alarm\' (alarm settings)\.
+.
+.P
+The player works file\-based \- one reason, why i developed \fBmyradio\fR\. Support of filetypes depends on gstreamer and his plugins (the second reason)\.
+.
+.P
+Until now there are five screens:
+.
+.IP "\(bu" 4
+Player: Main screen with audio player, digital clock, complete alarm view
+.
+.IP "\(bu" 4
+Clock: Analog clock with remaining sleep time
+.
+.IP "\(bu" 4
+Alarm: Alarm settings (two alarms)
+.
+.IP "\(bu" 4
+Weather: Hourly weather forecast for today and tomorrow \- powered by forecast\.io \fIhttp://forecast\.io\fR \- if you get an apikey \fIhttps://developer\.forecast\.io\fR
+.
+.IP "\(bu" 4
+System: The possibility to reboot/shutdown
+.
+.IP "" 0
+.
+.SH "PREREQUISITE"
+It depends on your configuration\. Here is, what i have done for my Raspberry PI:
+.
+.IP "\(bu" 4
+Install Python and Kivy \fIhttps://github\.com/mrichardson23/rpi\-kivy\-screen\fR \- maybe all steps upto 15 at the time of writing this document
+.
+.IP "\(bu" 4
+Install additional required Python packages \fBsudo pip install python\-forecastio pytz tzlocal\fR
+.
+.IP "" 0
+.
+.P
+Weather (for details see \fICONFIGURATION\fR
+.
+.IP "\(bu" 4
+There is no problem if you have no APIKEY but you can\'t get weather forecast :\-)
+.
+.IP "\(bu" 4
+Get your APIKEY
+.
+.IP "\(bu" 4
+Identify your language
+.
+.IP "\(bu" 4
+Determine latitude and longitude
+.
+.IP "" 0
+.
+.P
+If your commands in \fBmyradio\.ini\fR use \fBsudo\fR, you must configure it\.
+.
+.P
+As last part you need a \fBmyradio\.ini\fR:
+.
+.SH "CONFIGURATION"
+It runs without an initial \fBmyradio\.ini\fR if you use the stable branch of kivy\. Otherwise you must configure at least \fBmonofont = RobotoMono\-Regular\fR in section \fB[system]\fR\. The alarm settings are updated in this file, too\. Here follows a description of all configuration settings:
+.
+.IP "" 4
+.
+.nf
+
+vi myradio\.ini # you see the default values with comments here
+
+[alarm]
+# path from which the analog clock will randomly pick an alarm file
+analog_dir = analog
+# same for digital clock
+digital_dir = digital
+# in how many seconds to alarm again after you have used "snooze"
+snooze_seconds = 60
+
+[alarm1]
+# alarm settings for alarm1
+# \.\.\.
+
+[alarm2]
+# \.\.\.
+
+[weather]
+# Determine latitude and longitude http://itouchmap\.com/latlong\.html
+latitude = 52\.370235
+longitude = 4\.903549
+# Get your APIKEY http://developer\.forecast\.io/
+apikey =
+# Identify your language https://developer\.forecast\.io/docs/v2#options
+language = en
+
+[audio]
+# comma\-separated list of root directories for your audio files
+# use absolute paths \- a path with / at the beginning
+# environment variables like $HOME get expanded to their values\.
+dirs = $HOME
+# comma\-separated list of extensions which will be shown in the player
+# and will be used for alarm, too
+formats = flac,mp3,ogg
+
+[system]
+# for kivy >1\.9 stable you can use RobotoMono\-Regular
+monofont = DroidSansMono
+# comma\-separated list of screen which will be shown
+# you can deactivate and order the screens here
+screens = player,clock,weather,alarm,system
+# For faster reboot/poweroff consider adding parameter "\-f"
+reboot = sudo /sbin/reboot
+shutdown = sudo /sbin/halt
+# post_save_cmd will enable a button at the alarm settings
+# if you press the button, this command will be executed e\.g\.:
+# sudo mount \-o remount,rw /;cp /run/shm/myradio\.ini ~; sudo mount \-o remount,ro /
+post_save_cmd =
+
+# Short version:
+
+[alarm]
+analog_dir = analog
+digital_dir = digital
+snooze_seconds = 60
+
+[weather]
+latitude = 52\.370235
+longitude = 4\.903549
+apikey =
+language = en
+
+[audio]
+dirs = $HOME
+formats = flac,mp3,ogg
+
+[system]
+monofont = DroidSansMono
+screens = player,clock,weather,alarm,system
+reboot = sudo /sbin/reboot
+shutdown = sudo /sbin/halt
+post_save_cmd =
+.
+.fi
+.
+.IP "" 0
+.
+.SH "RECOMMENDATIONS"
+.
+.IP "\(bu" 4
+Use a network only runlevel or even better: Do not install an X server\. It may be possible with Minibian \fIhttps://minibianpi\.wordpress\.com/\fR in the future (Jessie will be released soon) or Raspbian network install \fIhttps://github\.com/debian\-pi/raspbian\-ua\-netinst\fR\. This will reduce boot time and the time for software upgrades and at last the writes on your SD\-card\.
+.
+.IP "\(bu" 4
+Configure your raspberry for read\-only operation\. This helps if you have temporary power outage and eliminates problems with your SD\-card\. Use tmpfs for \fBmyradio\.ini\fR, configure \fBpost_save_cmd\fR and consider parameter \'\-f\' for the shutdown/reboot commands\.
+.
+.IP "\(bu" 4
+Have a look at the \fIprerequisites\fR and setup\.sh as a starting point
+.
+.IP "\(bu" 4
+If you use a distribution with systemd and have problems mounting a NFS volume timely \- here is a solution:
+.
+.IP
+192\.168\.178\.1:/nfsexport /mnt nfs ro,noatime,nolock,noauto,x\-systemd\.automount 0 0
+.
+.IP "" 0
+.
+.SH "KNOWN ISSUES"
+.
+.IP "\(bu" 4
+General code cleanup necessary (remove odds and ends from showcase)
+.
+.IP "\(bu" 4
+Code quality is probably not the best \- it is my first python and kivy project
+.
+.IP "\(bu" 4
+No unit tests
+.
+.IP "\(bu" 4
+Setting alarms in the next minute is not possible (comparable to cron)
+.
+.IP "\(bu" 4
+Problems arise if you scroll the listview with touch\. You can instead scroll it using the slider at the bottom kivy issue 3418 \fIhttps://github\.com/kivy/kivy/issues/3418\fR
+.
+.IP "" 0
+.
+.SH "WISH LIST 1"
+.
+.IP "\(bu" 4
+Backlight control \fIhttps://www\.raspberrypi\.org/blog/the\-eagerly\-awaited\-raspberry\-pi\-display/#comment\-1242177\fR
+.
+.IP "\(bu" 4
+Error messages for post_save_cmd
+.
+.IP "\(bu" 4
+Online update (git) for \fBmyradio\fR
+.
+.IP "" 0
+.
+.SH "WISH LIST 2"
+The following are not realizeable for me\. Feel free to participate!
+.
+.IP "\(bu" 4
+Volume control, timer, pause in the action bar
+.
+.IP "\(bu" 4
+Icons: hail\.png sleet\.png wind\.png (maybe needed in the future)
+.
+.IP "\(bu" 4
+Themes (change color, iconset) on the fly
+.
+.IP "\(bu" 4
+Nice graphics from an artist :\-)
+.
+.IP "\(bu" 4
+Additional KV screens \- mine are all finished
+.
+.IP "" 0
+.
+.P
+KV/Kivy improvements
+.
+.IP "\(bu" 4
+Improve KV layout for better performance (i use it on a Raspberry PI)
+.
+.IP "\(bu" 4
+Device independence to make it useable for other displays
+.
+.IP "\(bu" 4
+Fixes for the Listview problems (doubletab and scrolling with fingers is not useable)
+.
+.IP "" 0
+.
+.SH "WISH LIST 3"
+I am not sure if there is really a need for it \- but i am interested\.\.\.
+.
+.IP "\(bu" 4
+Generic settings KV(!) file for all configuration options with on\-screen\-keyboard \- would need to move the remaining configuration variables to properties
+.
+.IP "" 0
+.
+.SH "EXAMPLES"
+.
+.nf
+
+myradio # normal start with myradio\.ini in working dir
+myradio /run/shm/myradio\.ini # start with specific ini
+.
+.fi
+.
+.SH "AUTHOR"
+Michael Arlt
+.
+.SH "LICENSE"
+.
+.nf
+
+myRadio \- an alarm clock with a simple audio player and weather forecast
+Copyright (C) 2015  Michael Arlt, GPL3 or higher
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version\.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\.  See the
+GNU General Public License for more details\.
+
+You should have received a copy of the GNU General Public License
+along with this program\.  If not, see <http://www\.gnu\.org/licenses/>\.
+.
+.fi
+.
+.P
+Used source from Kivy Showcase: MIT \fIhttps://opensource\.org/licenses/MIT\fR
+.
+.P
+Most icons from gnome\-accessibility\-themes (HighContrast): presumably GPL 2 or higher \fIhttp://www\.gnu\.org/licenses/old\-licenses/gpl\-2\.0\fR
+.
+.P
+Logo icon based on:
+.
+.P
+2010\-07\-20 Black windup alarm clock face by Sun Ladder \- Own work\. Licensed under CC BY\-SA 3\.0 \fIhttps://creativecommons\.org/licenses/by\-sa/3\.0/\fR via Wikimedia Commons https://commons\.wikimedia\.org/wiki/File:2010\-07\-20_Black_windup_alarm_clock_face\.jpg
+.
+.P
+Analog alarms:
+.
+.IP "\(bu" 4
+1\.ogg \fIhttps://commons\.wikimedia\.org/wiki/File:Alarmclock\-mechanical\.ogg\fR, Licensed under CC BY\-SA 3\.0 \fIhttps://creativecommons\.org/licenses/by\-sa/3\.0/\fR via Wikimedia Commons
+.
+.IP "\(bu" 4
+2\.ogg \fIhttps://commons\.wikimedia\.org/wiki/File:WWS_Alarmclock\.ogg\fR, Licensed under CC BY\-SA 4\.0 \fIhttps://creativecommons\.org/licenses/by/4\.0/deed\.en\fR via Wikimedia Commons
+.
+.IP "\(bu" 4
+3\.ogg \fIhttps://commons\.wikimedia\.org/wiki/File:WWS_Alarmclockringing\.ogg\fR, Licensed under CC BY\-SA 4\.0 \fIhttps://creativecommons\.org/licenses/by/4\.0/deed\.en\fR via Wikimedia Commons
+.
+.IP "" 0
+.
+.P
+Digital alarms:
+.
+.IP "\(bu" 4
+1\.ogg \fIhttps://commons\.wikimedia\.org/wiki/File:WWS_Alarmclockringing\.ogg\fR (first release), Licensed under CC BY\-SA 4\.0 \fIhttps://creativecommons\.org/licenses/by/4\.0/deed\.en\fR via Wikimedia Commons
+.
+.IP "" 0
+.
+.SH "THANKS"
+Thanks to the whole community \- especially the task force from #kivy: bionoid, dessant, inclement, kovak, kyved, thirtman and all who i have forgotten\.
+.
+.SH "SEE ALSO"
+kivy\.org \fIhttp://kivy\.org/\fR

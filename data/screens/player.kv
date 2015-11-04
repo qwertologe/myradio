@@ -1,0 +1,296 @@
+#:import lv kivy.uix.listview
+#:import la kivy.adapters.listadapter
+
+<ListItemButton>:
+  font_size: dp(40)
+  height: dp(44)
+  halign: 'left'
+  text_size: self.size
+  #selected_color: 0, 0, 1, 1
+  deselected_color: 0, 0, 0, 1
+  padding_x: dp(2)
+  shorten: True
+  shorten_from: 'right'
+  canvas.before:
+    Color:
+      rgb: 0,0,0
+
+ShowcaseScreen:
+  name: 'player'
+  fullscreen: True
+  on_enter: app.alarm_type = 'digital'
+
+  RelativeLayout:
+    id: rl
+
+    BoxLayout:
+      orientation: 'horizontal'
+
+      Splitter:
+        sizable_from: 'right'
+        min_size: 48*7
+        max_size: rl.width * 0.7
+
+        BoxLayout:
+          orientation: 'vertical'
+
+          BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 10
+
+            Button:
+              id: pause
+              size_hint: 1, 1
+              on_release: app.sound_pause()
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/playback-pause.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+            Button:
+              id: stop
+              size_hint: 1, 1
+              on_release: app.sound_stop()
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/playback-stop.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+            Button:
+              id: skip_back
+              size_hint: 1, 1
+              on_release: app.skip(-1)
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/skip-backward.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+            Button:
+              id: seek_back
+              size_hint: 1, 1
+              on_release: app.seek(-10)
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/seek-backward.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+            Button:
+              id: play
+              size_hint: 1, 1
+              on_release: app.request_sound(listview.adapter.selection[0].text)
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/playback-start.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+            Button:
+              id: seek_forward
+              size_hint: 1, 1
+              on_release: app.seek(10)
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/seek-forward.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+            Button:
+              id: skip_forward
+              size_hint: 1, 1
+              on_release: app.skip(1)
+              background_color: [0.7,0.7,0.7,0.7]
+
+              Image:
+                source: 'data/icons/player/skip-forward.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+
+          Slider:
+            id: pb
+            orientation: 'horizontal'
+            size_hint: 1, 10
+            min: 0
+            max: app.audiolength
+            step: app.audiolength / 100
+            value: app.audioprogress
+            on_value: app.jump(self.value)
+
+          Spinner:
+            size_hint: 1, 10
+            values: app.audiorootdirs
+            text: self.values[0]
+            background_color: [0,0,0,0]
+            on_text: app.audio_cd(self.text)
+
+          ListView:
+            size_hint: 1, 70
+            id: listview
+            adapter:
+              la.ListAdapter(
+              data=app.audiofiles,
+              selection_mode='single',
+              allow_empty_selection=False,
+              cls=lv.ListItemButton)
+
+          BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 10
+
+            Button:
+              text: '..'
+              on_release:
+                app.audio_cd('..')
+                audio_index.value = 0
+              size_hint_x: None
+              width: dp(48)
+              background_color: [0.7,0.7,0.7,0.7]
+
+            Button:
+              text: 'cd'
+              on_release:
+                app.audio_cd(listview.adapter.selection[0].text)
+                audio_index.value = 0
+              size_hint_x: None
+              width: dp(48)
+              background_color: [0.7,0.7,0.7,0.7]
+
+            Slider:
+              id: audio_index
+              orientation: 'horizontal'
+              min: 0
+              max: len(app.audiofiles) -1
+              step: 1
+              value: app.audioindex
+              on_value:
+                listview.adapter.select_list([listview.adapter.get_view(int(self.value))])
+                listview.scroll_to(int(self.value))
+
+      BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+          id: clock
+          text: app.clock
+          font_name: app.monofont
+          font_size: self.width/5*5/3 # *12/9
+          size_hint: 1,1.3
+
+        BoxLayout:
+          orientation: 'horizontal'
+          size_hint: 1,1
+
+          Switch:
+            active: app.alarm1_active
+            on_active: app.alarm1_active = self.active
+            size_hint: None,0.5
+
+          Button:
+            id: alarm1
+            text: app.alarm1_lag + ' ' + app.alarm1_text
+            font_size: self.width/len(self.text)*5/3 # *12/9
+            size_hint: 1,0.5
+            font_name: app.monofont
+            background_color: [0,0,0,0]
+            on_release: app.go_screen_name('alarm')
+
+        BoxLayout:
+          orientation: 'horizontal'
+          size_hint: 1,1
+
+          Switch:
+            active: app.alarm2_active
+            on_active: app.alarm2_active = self.active
+            size_hint: None,0.5
+
+          Button:
+            id: alarm2
+            text: app.alarm2_lag + ' ' + app.alarm2_text
+            size_hint: 1,0.5
+            font_size: self.width/len(self.text)*5/3 # *12/9
+            font_name: app.monofont
+            background_color: [0,0,0,0]
+            on_release: app.go_screen_name('alarm')
+
+        BoxLayout:
+          orientation: 'horizontal'
+          size_hint: 1,1
+
+          Slider:
+            id: sleeptimer
+            orientation: 'horizontal'
+            size_hint: 0.7, 0.5
+            min: 0
+            max: 99
+            step: 1
+            value: app.sleeptimer
+            on_value: app.set_sleeptimer(self.value)
+
+          Button:
+            id: sleeptimer_onoff
+            size_hint: None, 0.5
+            size: 48, 48
+            text: "%i" % app.sleeptimer
+            background_color: [0,0,0,0]
+
+            Image:
+              source: 'data/icons/main/sleep.png'
+              center_x: self.parent.center_x
+              center_y: self.parent.center_y
+
+        BoxLayout:
+          orientation: 'horizontal'
+          size_hint: 1,1
+
+          Slider:
+            id: volume
+            orientation: 'horizontal'
+            size_hint: 0.7, 0.5
+            min: 0
+            max: 1
+            value: app.volume
+            on_value: app.set_volume(self.value)
+
+          Button:
+            id: mute
+            size_hint: None, 0.5
+            size: 48, 48
+            background_color: [0,0,0,0]
+
+            Image:
+              source: 'data/icons/main/audio-volume-high.png'
+              center_x: self.parent.center_x
+              center_y: self.parent.center_y
+
+        BoxLayout:
+          orientation: 'horizontal'
+          size_hint: 1,1
+
+          Slider:
+            id: brightness
+            orientation: 'horizontal'
+            size_hint: 0.7, 0.5
+            min: 0
+            max: 99
+            value: 99
+
+          Button:
+            id: display
+            size_hint: None, 0.5
+            size: 48, 48
+            background_color: [0,0,0,0]
+
+            Image:
+              source: 'data/icons/main/display-brightness.png'
+              center_x: self.parent.center_x
+              center_y: self.parent.center_y
+
