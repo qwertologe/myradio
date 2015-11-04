@@ -205,7 +205,7 @@ Digital alarms:
 
 ## THANKS
 
-Thanks to the whole community - especially the task force from #kivy: bionoid, dessant, inclement, kovak, kyved, thirtman and all who i have forgotten.
+Thanks to the whole community - especially the task force from #kivy: bionoid, dessant, inclement, kovak, kived, tshirtman and all who i have forgotten.
 
 ## SEE ALSO
 
