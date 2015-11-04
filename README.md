@@ -21,6 +21,14 @@ Until now there are five screens:
   * Weather: Hourly weather forecast for today and tomorrow - powered by [forecast.io](http://forecast.io) - if you get an [apikey](https://developer.forecast.io)
   * System: The possibility to reboot/shutdown
 
+## SCREENSHOTS
+
+![alarm](https://cloud.githubusercontent.com/assets/1454849/10955131/13dcc236-8352-11e5-9976-8c9c5434af04.png)
+![alarm_snooze](https://cloud.githubusercontent.com/assets/1454849/10955133/13e3f5f6-8352-11e5-843c-4abab8c360a7.png)
+![clock](https://cloud.githubusercontent.com/assets/1454849/10955132/13df5e60-8352-11e5-89c5-0c68edb7966c.png)
+![player](https://cloud.githubusercontent.com/assets/1454849/10955135/13e6fcba-8352-11e5-892b-617aafd4b2a9.png)
+![weather](https://cloud.githubusercontent.com/assets/1454849/10955134/13e5a216-8352-11e5-8816-df07778d143c.png)
+
 ## PREREQUISITE
 
 It depends on your configuration. Here is, what i have done for my Raspberry PI:
