@@ -9,6 +9,8 @@ myradio(1) --  An alarm clock with a simple audio player and weather forecast
 
 A highly configurable alarm clock with support for playing audio files from your filesystem and weather forecast from forecast.io. All works without X - framebuffer is enough.
 
+Currently it works well with a raspberry and the new released [7 inch touch display](https://www.raspberrypi.org/products/raspberry-pi-touch-display/) - [more information](https://www.raspberrypi.org/blog/the-eagerly-awaited-raspberry-pi-display/).
+
 You can configure which KV-screens you want to see [CONFIGURATION]. It may be possible, that a screen references another - e.g. 'player' has a link to 'alarm' (alarm settings).
 
 The player works file-based - one reason, why i developed `myradio`. Support of filetypes depends on gstreamer and his plugins (the second reason).
