@@ -30,7 +30,7 @@ Screenshots are not converted by ronn - no idea. Go to [GitHub](https://github.c
 ![alarm](https://cloud.githubusercontent.com/assets/1454849/10955131/13dcc236-8352-11e5-9976-8c9c5434af04.png)
 ![alarm_snooze](https://cloud.githubusercontent.com/assets/1454849/10955133/13e3f5f6-8352-11e5-843c-4abab8c360a7.png)
 ![clock](https://cloud.githubusercontent.com/assets/1454849/10955132/13df5e60-8352-11e5-89c5-0c68edb7966c.png)
-![player](https://cloud.githubusercontent.com/assets/1454849/10955135/13e6fcba-8352-11e5-892b-617aafd4b2a9.png)
+![player](https://cloud.githubusercontent.com/assets/1454849/10956405/ae4fc8dc-835b-11e5-9179-93cc747c1bd3.png)
 ![weather](https://cloud.githubusercontent.com/assets/1454849/10955134/13e5a216-8352-11e5-8816-df07778d143c.png)
 ![system](https://cloud.githubusercontent.com/assets/1454849/10956058/a18e0436-8358-11e5-8803-d4565a9edba2.png)
 
