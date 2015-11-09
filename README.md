@@ -25,7 +25,7 @@ Until now there are five screens:
 
 ## SCREENSHOTS
 
-Screenshots are not converted by ronn - no idea. Go to [GitHub](https://github.com/qwertologe/myradio)
+If you read this using `man`: Screenshots are not converted by `ronn`. Go to [GitHub](https://github.com/qwertologe/myradio) instead.
 
 ![alarm](https://cloud.githubusercontent.com/assets/1454849/10955131/13dcc236-8352-11e5-9976-8c9c5434af04.png)
 ![alarm_snooze](https://cloud.githubusercontent.com/assets/1454849/10955133/13e3f5f6-8352-11e5-843c-4abab8c360a7.png)
