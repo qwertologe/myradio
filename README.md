@@ -98,8 +98,8 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     # you can deactivate and order the screens here
     screens = player,clock,weather,alarm,system
     # For faster reboot/poweroff consider adding parameter "-f"
-    reboot = sudo /sbin/reboot
-    shutdown = sudo /sbin/halt
+    reboot = sudo /sbin/reboot &
+    shutdown = sudo /sbin/halt &
     # post_save_cmd will enable a button at the alarm settings
     # if you press the button, this command will be executed e.g.:
     # sudo mount -o remount,rw /;cp /run/shm/myradio.ini ~; sudo mount -o remount,ro /
