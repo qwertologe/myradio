@@ -125,8 +125,8 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     [system]
     monofont = DroidSansMono
     screens = player,clock,weather,alarm,system
-    reboot = sudo /sbin/reboot
-    shutdown = sudo /sbin/halt
+    reboot = sudo /sbin/reboot &
+    shutdown = sudo /sbin/halt &
     post_save_cmd =
 
 ## RECOMMENDATIONS
