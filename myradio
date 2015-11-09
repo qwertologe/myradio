@@ -257,7 +257,6 @@ class ShowcaseApp(App):
 
     def sound_pause(self):
         if self.sound:
-            print 'sound - pause'
             if self.sound.state == 'play':
                 self.pause_state = 'down'
                 self.sound.stop()
@@ -268,7 +267,6 @@ class ShowcaseApp(App):
                 self.sound.seek(seconds)
                 self.pause_state = 'normal'
         else:
-            print 'nosound - normal'
             self.pause_state = 'normal'
 
 
