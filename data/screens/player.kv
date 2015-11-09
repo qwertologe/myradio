@@ -39,17 +39,6 @@ ShowcaseScreen:
             size_hint: 1, 10
 
             Button:
-              id: pause
-              size_hint: 1, 1
-              on_release: app.sound_pause()
-              background_color: [0.7,0.7,0.7,0.7]
-
-              Image:
-                source: 'data/icons/player/playback-pause.png'
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
-
-            Button:
               id: stop
               size_hint: 1, 1
               on_release: app.sound_stop()

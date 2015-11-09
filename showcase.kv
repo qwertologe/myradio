@@ -54,6 +54,16 @@ BoxLayout:
                 title: 'myRadio'
                 app_icon: 'data/icons/logo.png'
 
+            ActionToggleButton:
+                id: player_pause
+                icon: 'data/icons/main/playback-pause.png'
+                background_color: [2,0,0,1]
+                state: app.pause_state
+                disabled: True
+                on_release: app.sound_pause()
+
+            ActionSeparator:
+
     ScrollView:
         id: sv
         size_hint_y: None

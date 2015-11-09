@@ -133,6 +133,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
 
   * Use a network only runlevel or even better: Do not install an X server. It may be possible with [Minibian](https://minibianpi.wordpress.com/) in the future (Jessie will be released soon) or [Raspbian network install](https://github.com/debian-pi/raspbian-ua-netinst). This will reduce boot time and the time for software upgrades and at last the writes on your SD-card.
   * Configure your raspberry for read-only operation. This helps if you have temporary power outage and eliminates problems with your SD-card. Use tmpfs for `myradio.ini`, configure `post_save_cmd` and consider parameter '-f' for the shutdown/reboot commands.
+  * At least use `noatime` option for your filesystems
   * Have a look at the [prerequisites](#PREREQUISITE) and setup.sh as a starting point
   * If you use a distribution with systemd and have problems mounting a NFS volume timely - here is a solution:
 
@@ -156,7 +157,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
 
 The following are not realizeable for me. Feel free to participate!
 
-  * Volume control, timer, pause in the action bar
+  * Maybe volume control, timer in the action bar
   * Icons: hail.png sleet.png wind.png (maybe needed in the future)
   * Themes (change color, iconset) on the fly
   * Nice graphics from an artist :-)

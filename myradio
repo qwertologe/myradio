@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from kivy.core.audio import SoundLoader
 from datetime import datetime,date,timedelta
 from os import path, system, listdir
-from sys import argv
+from sys import argv,exit
 from random import choice
 import forecastio
 from pytz import timezone,utc
@@ -126,12 +126,9 @@ class ShowcaseApp(App):
     alarm2_text = StringProperty('                     ')
 
     # audio settings from configuration file
-    #audiorootdir = expandvars(config.getdefault('audio', 'dir', '$HOME'))
     audiorootdirs = [i for i in expandvars(config.getdefault('audio', 'dirs', '$HOME')).split(',')]
     audiorootdir = audiorootdirs[0]
     audioformats = ['.{0}'.format(i) for i in config.getdefault('audio', 'formats', 'flac mp3 ogg').split(',')]
-
-    # alarm variables
     audiodir = StringProperty(None)
     audio_playing_file = None
     audio_playing_dir = None
@@ -142,11 +139,13 @@ class ShowcaseApp(App):
     audioprogress = NumericProperty(0)
     audioindex = NumericProperty(0)
     sound = None
+    pause_state = StringProperty('normal')
+    last_set_audioprogress = None
+
+    # alarm variables
     sleeptimer = NumericProperty(0)
     sleeptimer_start = None
     sleeptimer_minutes = None
-    is_playing = False
-    last_set_audioprogress = None
     alarm1 = None
     alarm2 = None
 
@@ -159,8 +158,8 @@ class ShowcaseApp(App):
     # system settings from configuration file
     monofont = config.getdefault('system', 'monofont', 'DroidSansMono')
     post_save_cmd = config.getdefault('system', 'post_save_cmd', '')
-    reboot_cmd = config.getdefault('system', 'reboot', 'sudo /sbin/reboot')
-    shutdown_cmd = config.getdefault('system', 'shutdown', 'sudo /sbin/halt')
+    reboot_cmd = config.getdefault('system', 'reboot', 'sudo /sbin/reboot &')
+    shutdown_cmd = config.getdefault('system', 'shutdown', 'sudo /sbin/halt &')
     available_screens = (config.getdefault('system', 'screens', 'player,clock,alarm,weather,system').split(','))
 
     # locale
@@ -208,9 +207,10 @@ class ShowcaseApp(App):
         for idx,screen in enumerate(self.screen_names):
             self.root.ids.av.add_widget(
                 ActionToggleButton(
-                    text=screen,
                     id=screen,
+                    text=screen,
                     icon='data/screens/'+ screen + '.png',
+                    background_color=[0.7,0.7,0.7,0.7],
                     on_release=partial(self.go_screen_helper,idx),
                 )
             )
@@ -256,16 +256,20 @@ class ShowcaseApp(App):
         return screen
 
     def sound_pause(self):
-        if self.sound != None:
+        if self.sound:
+            print 'sound - pause'
             if self.sound.state == 'play':
-                self.is_playing = False
+                self.pause_state = 'down'
                 self.sound.stop()
             else:
                 seconds = self.last_set_audioprogress
                 self.sound.play()
                 self.audioprogress = seconds
                 self.sound.seek(seconds)
-                self.is_playing = True
+                self.pause_state = 'normal'
+        else:
+            print 'nosound - normal'
+            self.pause_state = 'normal'
 
 
     def request_sound(self,path):
@@ -282,7 +286,8 @@ class ShowcaseApp(App):
                     self.audiolength = self.sound.length
                     self.sound.volume = self.volume
                     self.sound.play()
-                    self.is_playing = True
+                    self.pause_state = 'normal'
+                    self.root.ids.player_pause.disabled = False
                     return True
 
                 layout = BoxLayout(orientation='vertical')
@@ -296,8 +301,9 @@ class ShowcaseApp(App):
     def sound_stop(self):
         #self.alarm()
         if self.sound:
-            self.is_playing = False
+            self.pause_state = 'normal'
             self.sound.stop()
+            self.root.ids.player_pause.disabled = True
             self.sound = None
 
     def seek(self,seconds):
@@ -440,7 +446,7 @@ class ShowcaseApp(App):
                     self.last_set_audioprogress = audioprogress
                     self.audioprogress = audioprogress
                 else:
-                    if self.is_playing:
+                    if self.pause_state == 'normal':
                         self.skip(1)
             else:
                 if self.audioprogress != 0:
@@ -623,8 +629,11 @@ class ShowcaseApp(App):
 
     def reboot(self):
         system(self.reboot_cmd)
+        exit(0)
+
     def shutdown(self):
         system(self.shutdown_cmd)
+        exit(0)
 
 if __name__ == '__main__':
     ShowcaseApp().run()
