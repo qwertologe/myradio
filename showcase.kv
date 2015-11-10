@@ -57,7 +57,8 @@ BoxLayout:
             ActionToggleButton:
                 id: player_pause
                 icon: 'data/icons/main/playback-pause.png'
-                background_color: [2,0,0,1]
+                background_color: [0.35,0,0,1]
+                background_down: ''
                 state: app.pause_state
                 disabled: True
                 on_release: app.sound_pause()
