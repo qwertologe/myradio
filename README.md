@@ -104,6 +104,11 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     # if you press the button, this command will be executed e.g.:
     # sudo mount -o remount,rw /;cp /run/shm/myradio.ini ~; sudo mount -o remount,ro /
     post_save_cmd =
+    # backlight_cmd will be called if you change the brightness
+    # until now this is an external command
+    # maybe in the future there will be internal commands, too
+    backlight_cmd = xbacklight -set {}
+
 
     # Short version:
 
@@ -128,6 +133,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     reboot = sudo /sbin/reboot &
     shutdown = sudo /sbin/halt &
     post_save_cmd =
+    backlight_cmd = xbacklight -set {}
 
 ## RECOMMENDATIONS
 

@@ -161,6 +161,7 @@ class ShowcaseApp(App):
     reboot_cmd = config.getdefault('system', 'reboot', 'sudo /sbin/reboot &')
     shutdown_cmd = config.getdefault('system', 'shutdown', 'sudo /sbin/halt &')
     available_screens = (config.getdefault('system', 'screens', 'player,clock,alarm,weather,system').split(','))
+    backlight_cmd = config.getdefault('system', 'backlight_cmd', 'xbacklight -set {}')
 
     # locale
     weekday = []
@@ -621,6 +622,9 @@ class ShowcaseApp(App):
 
         if self.apikey:
             Clock.schedule_once(update_weather_steady)
+
+    def set_backlight(self,percent):
+        system(self.backlight_cmd.format(int(percent)))
 
     def save_config(self):
         system(self.post_save_cmd)
