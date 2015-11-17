@@ -289,13 +289,13 @@ class ShowcaseApp(App):
                     self.root.ids.player_pause.disabled = False
                     return True
 
-                layout = BoxLayout(orientation='vertical')
-                layout.add_widget(Label(text="Loading failed for:\n" + audiofile))
-                close=Button(text=':-(', font_size=30, size_hint=(1,0.2))
-                layout.add_widget(close)
-                popup = Popup(title='Problems - sorry ...', content=layout, auto_dismiss=False)
-                close.bind(on_release=popup.dismiss)
-                popup.open()
+            layout = BoxLayout(orientation='vertical')
+            layout.add_widget(Label(text="Loading failed for:\n" + audiofile))
+            close=Button(text=':-(', font_size=30, size_hint=(1,0.2))
+            layout.add_widget(close)
+            popup = Popup(title='Problems - sorry ...', content=layout, auto_dismiss=False)
+            close.bind(on_release=popup.dismiss)
+            popup.open()
 
     def sound_stop(self):
         #self.alarm()
