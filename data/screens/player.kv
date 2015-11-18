@@ -147,6 +147,7 @@ ShowcaseScreen:
             Button:
               text: 'cd'
               on_release:
+                if app.audiofiles != []: \
                 app.audio_cd(listview.adapter.selection[0].text)
                 audio_index.value = 0
               size_hint_x: None
@@ -161,6 +162,7 @@ ShowcaseScreen:
               step: 1
               value: app.audioindex
               on_value:
+                if app.audiofiles != []: \
                 listview.adapter.select_list([listview.adapter.get_view(int(self.value))])
                 listview.scroll_to(int(self.value))
 
