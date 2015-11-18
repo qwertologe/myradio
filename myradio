@@ -289,8 +289,13 @@ class ShowcaseApp(App):
                     self.root.ids.player_pause.disabled = False
                     return True
 
+            text = audiofile
+            occurrences = text.count("/")
+            for i in range(1, occurrences +1):
+                text = text.replace('/', '\n' + '  '*(i-1), 1)
+
             layout = BoxLayout(orientation='vertical')
-            layout.add_widget(Label(text="Loading failed for:\n" + audiofile))
+            layout.add_widget(Label(text="Loading failed for:\n" + text))
             close=Button(text=':-(', font_size=30, size_hint=(1,0.2))
             layout.add_widget(close)
             popup = Popup(title='Problems - sorry ...', content=layout, auto_dismiss=False)
