@@ -89,6 +89,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     dirs = $HOME
     # comma-separated list of extensions which will be shown in the player
     # and will be used for alarm, too
+    # it's up to you, to configure your system for these formats (gstreamer)
     formats = flac,mp3,ogg
 
     [system]
