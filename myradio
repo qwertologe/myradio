@@ -50,6 +50,7 @@ from locale import setlocale, LC_ALL
 from os.path import expandvars
 
 from kivy.config import ConfigParser
+from re import match
 
 
 class ShowcaseScreen(Screen):
@@ -303,7 +304,7 @@ class ShowcaseApp(App):
             popup.open()
 
     def sound_stop(self):
-        #self.alarm()
+
         if self.sound:
             self.pause_state = 'normal'
             self.sound.stop()
@@ -327,9 +328,11 @@ class ShowcaseApp(App):
                     self.request_sound(self.audiofiles[index])
                     self.audioindex = index
                     #sm.listview.adapter.select_list([sm.listview.adapter.get_view(index)])
-
+                else:
+                    self.sound_stop()
             except:
                 pass
+
 
     def set_volume(self,volume):
 
@@ -342,8 +345,12 @@ class ShowcaseApp(App):
     def audio_cd(self,path):
 
         if path[0] == '/':
-            self.audiorootdir = path
             newdir = path
+            if match(path,self.audiorootdir) == None:
+                for dir in self.audiorootdirs:
+                    if match(path,dir):
+                        self.audiorootdir = dir
+                        break
         elif path == '..':
             if len(self.audiodir) > len(self.audiorootdir):
                 newdir = dirname(self.audiodir)
