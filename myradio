@@ -672,10 +672,10 @@ class ShowcaseApp(App):
         exit(0)
 
     def updates_available(self):
-        if system('git rev-list HEAD...origin/master --count --max-count=1 | grep -q ^1$') == 0:
-            return True
-        else:
+        if system('test $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed "s/\// /g") | cut -f1)') == 0:
             return False
+        else:
+            return True
 
     def install_updates(self):
         system('git merge origin/master')
