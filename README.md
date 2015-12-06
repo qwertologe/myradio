@@ -113,7 +113,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     backlight_cmd = sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
     # number of seconds to wait until the display is turned off (brightness 0)
     # touching the screen will revert the brightness (if possible)
-    backlight_timeout = 60
+    backlight_timeout = 120
 
 
     # Short version:
@@ -140,7 +140,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     shutdown = sudo /sbin/halt &
     post_save_cmd =
     backlight_cmd = sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
-    backlight_timeout = 60
+    backlight_timeout = 120
 
 ## RECOMMENDATIONS
 

@@ -163,7 +163,7 @@ class ShowcaseApp(App):
     shutdown_cmd = config.getdefault('system', 'shutdown', 'sudo /sbin/halt &')
     available_screens = (config.getdefault('system', 'screens', 'player,clock,alarm,weather,system').split(','))
     backlight_cmd = config.getdefault('system', 'backlight_cmd', 'sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"')
-    backlight_timeout = int(config.getdefault('system', 'backlight_timeout', 60))
+    backlight_timeout = int(config.getdefault('system', 'backlight_timeout', 120))
     backlight_level = NumericProperty(60)
     backlight_off = BooleanProperty(False)
 
@@ -409,6 +409,8 @@ class ShowcaseApp(App):
 
             if alarm_sound:
                 alarm_sound.play()
+
+            self.backlight_on()
             snooze_seconds = self.snooze_seconds
 
             layout = BoxLayout(size_hint=(1,1))
