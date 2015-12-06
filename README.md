@@ -10,6 +10,7 @@ myradio(1) --  An alarm clock with a simple audio player and weather forecast
 A highly configurable alarm clock with support for playing audio files from your filesystem and weather forecast from forecast.io. All works without X - framebuffer is enough.
 
 Currently it works well with a raspberry and the new released [7 inch touch display](https://www.raspberrypi.org/products/raspberry-pi-touch-display/) - [more information](https://www.raspberrypi.org/blog/the-eagerly-awaited-raspberry-pi-display/).
+Backlight control works with some flaws - see [KNOWN ISSUES].
 
 You can configure which KV-screens you want to see [CONFIGURATION]. It may be possible, that a screen references another - e.g. 'player' has a link to 'alarm' (alarm settings).
 
@@ -21,9 +22,7 @@ Until now there are five screens:
   * Clock: Analog clock with remaining sleep time
   * Alarm: Alarm settings (two alarms)
   * Weather: Hourly weather forecast for today and tomorrow - powered by [forecast.io](http://forecast.io) - if you get an [apikey](https://developer.forecast.io)
-  * System: The possibility to reboot/shutdown
-
-Backlight control works with some flaws - see [KNOWN ISSUES].
+  * System: The possibility to reboot/shutdown and update 'myradio' (using git)
 
 ## SCREENSHOTS
 
@@ -42,6 +41,7 @@ It depends on your configuration. Here is, what i have done for my Raspberry PI:
 
   * [Install Python and Kivy](https://github.com/mrichardson23/rpi-kivy-screen) - maybe all steps upto 15 at the time of writing this document
   * Install additional required Python packages  `sudo pip install python-forecastio pytz tzlocal`
+  * git must be installed (online update)
 
 Weather (for details see [CONFIGURATION])
 
@@ -154,7 +154,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
 
 ## KNOWN ISSUES
 
-  * Backlight control is implemented but can only be on or off [forum for official 7-inch touch display](https://www.raspberrypi.org/forums/viewtopic.php?f=108&t=120968). Until now /sys/class/backlight/rpi_backlight/brightness can be set to a value from 0 to 255 but a value lower than 128 will turn it off, higher will turn it on. Ensure that the slider is above 50% which will result in a value >= 128. Additional, your touch to activate the brightness can affect a widget (if you hit one).
+  * Backlight control is implemented but can only be on or off [forum for official 7-inch touch display](https://www.raspberrypi.org/forums/viewtopic.php?f=108&t=120968). Until now `/sys/class/backlight/rpi_backlight/brightness` can be set to a value from 0 to 255 but a value lower than 128 will turn it off, higher will turn it on. Ensure that the slider is above 50% which will result in a value >= 128. Additional, your touch to activate the brightness can affect a widget (if you hit one).
   * General code cleanup necessary (remove odds and ends from showcase)
   * Code quality is probably not the best - it is my first python and kivy project
   * No unit tests

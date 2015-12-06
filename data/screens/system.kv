@@ -22,3 +22,15 @@ ShowcaseScreen:
         center_x: self.parent.center_x
         center_y: self.parent.center_y
 
+    Button:
+      background_color: 0.1,0.1,0.1,1
+      on_release: app.install_updates()
+      disabled: not app.updates_available()
+
+      Image:
+        size_hint_y: None
+        source: 'data/icons/system/update.png'
+        color: .5,.5,.5 if self.parent.disabled else 1,1,1
+        center_x: self.parent.center_x
+        center_y: self.parent.center_y
+

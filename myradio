@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from kivy.core.audio import SoundLoader
 from datetime import datetime,date,timedelta
-from os import path, system, listdir
+from os import path, system, listdir, execv
 from sys import argv,exit
 from random import choice
 import forecastio
@@ -670,6 +670,16 @@ class ShowcaseApp(App):
     def shutdown(self):
         system(self.shutdown_cmd)
         exit(0)
+
+    def updates_available(self):
+        if system('git rev-list HEAD...origin/master --count --max-count=1 | grep -q ^1$') == 0:
+            return True
+        else:
+            return False
+
+    def install_updates(self):
+        system('git merge origin/master')
+        execv(__file__, argv)
 
 if __name__ == '__main__':
     ShowcaseApp().run()

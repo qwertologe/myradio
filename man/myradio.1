@@ -13,7 +13,7 @@
 A highly configurable alarm clock with support for playing audio files from your filesystem and weather forecast from forecast\.io\. All works without X \- framebuffer is enough\.
 .
 .P
-Currently it works well with a raspberry and the new released 7 inch touch display \fIhttps://www\.raspberrypi\.org/products/raspberry\-pi\-touch\-display/\fR \- more information \fIhttps://www\.raspberrypi\.org/blog/the\-eagerly\-awaited\-raspberry\-pi\-display/\fR\.
+Currently it works well with a raspberry and the new released 7 inch touch display \fIhttps://www\.raspberrypi\.org/products/raspberry\-pi\-touch\-display/\fR \- more information \fIhttps://www\.raspberrypi\.org/blog/the\-eagerly\-awaited\-raspberry\-pi\-display/\fR\. Backlight control works with some flaws \- see \fIKNOWN ISSUES\fR\.
 .
 .P
 You can configure which KV\-screens you want to see \fICONFIGURATION\fR\. It may be possible, that a screen references another \- e\.g\. \'player\' has a link to \'alarm\' (alarm settings)\.
@@ -37,12 +37,9 @@ Alarm: Alarm settings (two alarms)
 Weather: Hourly weather forecast for today and tomorrow \- powered by forecast\.io \fIhttp://forecast\.io\fR \- if you get an apikey \fIhttps://developer\.forecast\.io\fR
 .
 .IP "\(bu" 4
-System: The possibility to reboot/shutdown
+System: The possibility to reboot/shutdown and update \'myradio\' (using git)
 .
 .IP "" 0
-.
-.P
-Backlight control works with some flaws \- see \fIKNOWN ISSUES\fR\.
 .
 .SH "SCREENSHOTS"
 If you read this using \fBman\fR: Screenshots are not converted by \fBronn\fR\. Go to GitHub \fIhttps://github\.com/qwertologe/myradio\fR instead\.
@@ -58,6 +55,9 @@ Install Python and Kivy \fIhttps://github\.com/mrichardson23/rpi\-kivy\-screen\f
 .
 .IP "\(bu" 4
 Install additional required Python packages \fBsudo pip install python\-forecastio pytz tzlocal\fR
+.
+.IP "\(bu" 4
+git must be installed (online update)
 .
 .IP "" 0
 .
@@ -204,7 +204,7 @@ If you use a distribution with systemd and have problems mounting a NFS volume t
 .SH "KNOWN ISSUES"
 .
 .IP "\(bu" 4
-Backlight control is implemented but can only be on or off forum for official 7\-inch touch display \fIhttps://www\.raspberrypi\.org/forums/viewtopic\.php?f=108&t=120968\fR\. Until now /sys/class/backlight/rpi_backlight/brightness can be set to a value from 0 to 255 but a value lower than 128 will turn it off, higher will turn it on\. Ensure that the slider is above 50% which will result in a value >= 128\. Additional, your touch to activate the brightness can affect a widget (if you hit one)\.
+Backlight control is implemented but can only be on or off forum for official 7\-inch touch display \fIhttps://www\.raspberrypi\.org/forums/viewtopic\.php?f=108&t=120968\fR\. Until now \fB/sys/class/backlight/rpi_backlight/brightness\fR can be set to a value from 0 to 255 but a value lower than 128 will turn it off, higher will turn it on\. Ensure that the slider is above 50% which will result in a value >= 128\. Additional, your touch to activate the brightness can affect a widget (if you hit one)\.
 .
 .IP "\(bu" 4
 General code cleanup necessary (remove odds and ends from showcase)
