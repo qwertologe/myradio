@@ -162,7 +162,10 @@ class ShowcaseApp(App):
     reboot_cmd = config.getdefault('system', 'reboot', 'sudo /sbin/reboot &')
     shutdown_cmd = config.getdefault('system', 'shutdown', 'sudo /sbin/halt &')
     available_screens = (config.getdefault('system', 'screens', 'player,clock,alarm,weather,system').split(','))
-    backlight_cmd = config.getdefault('system', 'backlight_cmd', 'xbacklight -set {}')
+    backlight_cmd = config.getdefault('system', 'backlight_cmd', 'sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"')
+    backlight_timeout = int(config.getdefault('system', 'backlight_timeout', 60))
+    backlight_level = NumericProperty(60)
+    backlight_off = BooleanProperty(False)
 
     # locale
     weekday = []
@@ -193,6 +196,8 @@ class ShowcaseApp(App):
         # localized weekdays
         for i in range(7):
           self.weekday.append(date(2015,10,5+i).strftime('%A'))
+
+        Clock.schedule_interval(self._backlight_off, self.backlight_timeout)
 
         self.title = 'myRadio'
         Clock.schedule_interval(self._update_clock, 1 / 60.)
@@ -270,6 +275,21 @@ class ShowcaseApp(App):
                 self.pause_state = 'normal'
         else:
             self.pause_state = 'normal'
+
+
+    def _backlight_off(self,dt):
+        if not self.backlight_off:
+            self.backlight_off = True
+            self.set_backlight(0)
+
+
+    def backlight_on(self):
+        Clock.unschedule(self._backlight_off)
+        if self.backlight_off:
+            self.set_backlight(self.backlight_level)
+            self.backlight_off = False
+        Clock.schedule_interval(self._backlight_off, self.backlight_timeout)
+        return True
 
 
     def request_sound(self,path):

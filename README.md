@@ -23,6 +23,8 @@ Until now there are five screens:
   * Weather: Hourly weather forecast for today and tomorrow - powered by [forecast.io](http://forecast.io) - if you get an [apikey](https://developer.forecast.io)
   * System: The possibility to reboot/shutdown
 
+Backlight control works with some flaws - see [KNOWN ISSUES].
+
 ## SCREENSHOTS
 
 If you read this using `man`: Screenshots are not converted by `ronn`. Go to [GitHub](https://github.com/qwertologe/myradio) instead.
@@ -41,7 +43,7 @@ It depends on your configuration. Here is, what i have done for my Raspberry PI:
   * [Install Python and Kivy](https://github.com/mrichardson23/rpi-kivy-screen) - maybe all steps upto 15 at the time of writing this document
   * Install additional required Python packages  `sudo pip install python-forecastio pytz tzlocal`
 
-Weather (for details see [CONFIGURATION]
+Weather (for details see [CONFIGURATION])
 
   * There is no problem if you have no APIKEY but you can't get weather forecast :-)
   * Get your APIKEY
@@ -106,9 +108,12 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     # sudo mount -o remount,rw /;cp /run/shm/myradio.ini ~; sudo mount -o remount,ro /
     post_save_cmd =
     # backlight_cmd will be called if you change the brightness
-    # until now this is an external command
-    # maybe in the future there will be internal commands, too
-    backlight_cmd = xbacklight -set {}
+    # a simple alternative if your display can be set with xbacklight:
+    # backlight_cmd = xbacklight -set {}
+    backlight_cmd = sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
+    # number of seconds to wait until the display is turned off (brightness 0)
+    # touching the screen will revert the brightness (if possible)
+    backlight_timeout = 60
 
 
     # Short version:
@@ -134,7 +139,8 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     reboot = sudo /sbin/reboot &
     shutdown = sudo /sbin/halt &
     post_save_cmd =
-    backlight_cmd = xbacklight -set {}
+    backlight_cmd = sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
+    backlight_timeout = 60
 
 ## RECOMMENDATIONS
 
@@ -148,6 +154,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
 
 ## KNOWN ISSUES
 
+  * Backlight control is implemented but can only be on or off [forum for official 7-inch touch display](https://www.raspberrypi.org/forums/viewtopic.php?f=108&t=120968). Until now /sys/class/backlight/rpi_backlight/brightness can be set to a value from 0 to 255 but a value lower than 128 will turn it off, higher will turn it on. Ensure that the slider is above 50% which will result in a value >= 128. Additional, your touch to activate the brightness can affect a widget (if you hit one).
   * General code cleanup necessary (remove odds and ends from showcase)
   * Code quality is probably not the best - it is my first python and kivy project
   * No unit tests
@@ -156,7 +163,6 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
 
 ## WISH LIST 1
 
-  * [Backlight control](https://www.raspberrypi.org/blog/the-eagerly-awaited-raspberry-pi-display/#comment-1242177)
   * Error messages for post_save_cmd
   * Online update (git) for `myradio`
 

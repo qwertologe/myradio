@@ -17,6 +17,7 @@
     option_cls: Factory.ActionSpinnerOptions
 
 <ShowcaseScreen>:
+    on_touch_down: app.backlight_on()
     ScrollView:
         do_scroll_x: False
         do_scroll_y: False if root.fullscreen else (content.height > root.height - dp(16))

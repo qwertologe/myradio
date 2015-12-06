@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "MYRADIO" "1" "November 2015" "" ""
+.TH "MYRADIO" "1" "December 2015" "" ""
 .
 .SH "NAME"
 \fBmyradio\fR \- An alarm clock with a simple audio player and weather forecast
@@ -41,6 +41,9 @@ System: The possibility to reboot/shutdown
 .
 .IP "" 0
 .
+.P
+Backlight control works with some flaws \- see \fIKNOWN ISSUES\fR\.
+.
 .SH "SCREENSHOTS"
 If you read this using \fBman\fR: Screenshots are not converted by \fBronn\fR\. Go to GitHub \fIhttps://github\.com/qwertologe/myradio\fR instead\.
 .
@@ -59,7 +62,7 @@ Install additional required Python packages \fBsudo pip install python\-forecast
 .IP "" 0
 .
 .P
-Weather (for details see \fICONFIGURATION\fR
+Weather (for details see \fICONFIGURATION\fR)
 .
 .IP "\(bu" 4
 There is no problem if you have no APIKEY but you can\'t get weather forecast :\-)
@@ -138,9 +141,12 @@ shutdown = sudo /sbin/halt &
 # sudo mount \-o remount,rw /;cp /run/shm/myradio\.ini ~; sudo mount \-o remount,ro /
 post_save_cmd =
 # backlight_cmd will be called if you change the brightness
-# until now this is an external command
-# maybe in the future there will be internal commands, too
-backlight_cmd = xbacklight \-set {}
+# a simple alternative if your display can be set with xbacklight:
+# backlight_cmd = xbacklight \-set {}
+backlight_cmd = sudo sh \-c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
+# number of seconds to wait until the display is turned off (brightness 0)
+# touching the screen will revert the brightness (if possible)
+backlight_timeout = 60
 
 
 # Short version:
@@ -166,7 +172,8 @@ screens = player,clock,weather,alarm,system
 reboot = sudo /sbin/reboot &
 shutdown = sudo /sbin/halt &
 post_save_cmd =
-backlight_cmd = xbacklight \-set {}
+backlight_cmd = sudo sh \-c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
+backlight_timeout = 60
 .
 .fi
 .
@@ -197,6 +204,9 @@ If you use a distribution with systemd and have problems mounting a NFS volume t
 .SH "KNOWN ISSUES"
 .
 .IP "\(bu" 4
+Backlight control is implemented but can only be on or off forum for official 7\-inch touch display \fIhttps://www\.raspberrypi\.org/forums/viewtopic\.php?f=108&t=120968\fR\. Until now /sys/class/backlight/rpi_backlight/brightness can be set to a value from 0 to 255 but a value lower than 128 will turn it off, higher will turn it on\. Ensure that the slider is above 50% which will result in a value >= 128\. Additional, your touch to activate the brightness can affect a widget (if you hit one)\.
+.
+.IP "\(bu" 4
 General code cleanup necessary (remove odds and ends from showcase)
 .
 .IP "\(bu" 4
@@ -214,9 +224,6 @@ Problems arise if you scroll the listview with touch\. You can instead scroll it
 .IP "" 0
 .
 .SH "WISH LIST 1"
-.
-.IP "\(bu" 4
-Backlight control \fIhttps://www\.raspberrypi\.org/blog/the\-eagerly\-awaited\-raspberry\-pi\-display/#comment\-1242177\fR
 .
 .IP "\(bu" 4
 Error messages for post_save_cmd
