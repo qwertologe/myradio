@@ -167,6 +167,12 @@ class ShowcaseApp(App):
     backlight_level = NumericProperty(60)
     backlight_off = BooleanProperty(False)
 
+    # git commands
+    git_check_update_cmd = config.getdefault('git', 'check_update_cmd', 'remote=`git ls-remote $(git rev-parse --abbrev-ref @{u} | tr / " ")` || false && test $(git rev-parse HEAD) != $(echo "$remote" | cut -f1)')
+    git_pre_update_cmd = config.getdefault('git', 'pre_update_cmd', '')
+    git_post_update_cmd = config.getdefault('git', 'post_update_cmd', '')
+    git_update_cmd = config.getdefault('git', 'update_cmd', 'git merge origin/master')
+
     # locale
     weekday = []
     setlocale(LC_ALL, '') # activates the current configured locale - do not remove
@@ -671,15 +677,28 @@ class ShowcaseApp(App):
         system(self.shutdown_cmd)
         exit(0)
 
-    def updates_available(self):
-        if system('test $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed "s/\// /g") | cut -f1)') == 0:
+    def update_available(self):
+
+        if self.git_check_update_cmd == '':
             return False
-        else:
+
+        if system(self.git_check_update_cmd) == 0:
             return True
+        else:
+            return False
 
     def install_updates(self):
-        system('git merge origin/master')
-        execv(__file__, argv)
+
+        if self.git_pre_update_cmd != '':
+            system(self.git_pre_update_cmd)
+
+        system(self.git_update_cmd)
+
+        if self.git_post_update_cmd != '':
+            system(self.git_post_update_cmd)
+
+        #execv(__file__, argv) # failed to open vchiq instance
+        self.reboot()
 
 if __name__ == '__main__':
     ShowcaseApp().run()

@@ -115,6 +115,15 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     # touching the screen will revert the brightness (if possible)
     backlight_timeout = 120
 
+    [git]
+    # should return true if update is available, otherwise false
+    # an empty check disables update button and check
+    check_update_cmd = remote=`git ls-remote $(git rev-parse --abbrev-ref @{u} | tr / " ")` || false && test $(git rev-parse HEAD) != $(echo "$remote" | cut -f1)
+    # pre could be used to remount rw if you use a ro filesystem
+    pre_update_cmd =
+    # pre could be used to remount ro if you use a ro filesystem
+    post_update_cmd =
+    update_cmd = git merge origin/master
 
     # Short version:
 
@@ -141,6 +150,12 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     post_save_cmd =
     backlight_cmd = sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
     backlight_timeout = 120
+
+    [git]
+    check_update_cmd = remote=`git ls-remote $(git rev-parse --abbrev-ref @{u} | tr / " ")` || false && test $(git rev-parse HEAD) != $(echo "$remote" | cut -f1)
+    pre_update_cmd =
+    post_update_cmd =
+    update_cmd = git merge origin/master
 
 ## RECOMMENDATIONS
 

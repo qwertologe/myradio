@@ -25,7 +25,7 @@ ShowcaseScreen:
     Button:
       background_color: 0.1,0.1,0.1,1
       on_release: app.install_updates()
-      disabled: not app.updates_available()
+      disabled: not app.update_available()
 
       Image:
         size_hint_y: None
