@@ -193,7 +193,7 @@ ShowcaseScreen:
               disabled: app.post_save_cmd == ''
               Image:
                 size_hint_y: None
-                source: 'data/icons/alarm/save-disabled.png' if self.disabled else 'data/icons/alarm/save.png'
+                source: 'data/icons/alarm/save-disabled.png' if self.parent.disabled else 'data/icons/alarm/save.png'
                 center_x: self.parent.center_x
                 center_y: self.parent.center_y
 
