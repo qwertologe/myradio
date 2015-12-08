@@ -171,7 +171,7 @@ class ShowcaseApp(App):
     git_check_update_cmd = config.getdefault('git', 'check_update_cmd', 'remote=`git ls-remote $(git rev-parse --abbrev-ref @{u} | tr / " ")` || false && test $(git rev-parse HEAD) != $(echo "$remote" | cut -f1)')
     git_pre_update_cmd = config.getdefault('git', 'pre_update_cmd', '')
     git_post_update_cmd = config.getdefault('git', 'post_update_cmd', '')
-    git_update_cmd = config.getdefault('git', 'update_cmd', 'git merge origin/master')
+    git_update_cmd = config.getdefault('git', 'update_cmd', 'git fetch origin; git reset --hard origin/master')
 
     # locale
     weekday = []
