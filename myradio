@@ -670,10 +670,12 @@ class ShowcaseApp(App):
         system(self.post_save_cmd)
 
     def reboot(self):
+        self.backlight_on()
         system(self.reboot_cmd)
         exit(0)
 
     def shutdown(self):
+        self.backlight_on()
         system(self.shutdown_cmd)
         exit(0)
 
