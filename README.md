@@ -39,7 +39,7 @@ If you read this using `man`: Screenshots are not converted by `ronn`. Go to [Gi
 
 It depends on your configuration. Here is, what i have done for my Raspberry PI:
 
-  * [Install Python and Kivy](https://github.com/mrichardson23/rpi-kivy-screen) - maybe all steps upto 15 at the time of writing this document
+  * [Install Python and Kivy](https://github.com/mrichardson23/rpi-kivy-screen) - maybe all steps upto 15 at the time of writing this document; maybe try this [newer documentation](http://kivy.org/docs/installation/installation-rpi.html#manual-installation-on-raspbian-jessie)
   * Install additional required Python packages  `sudo pip install python-forecastio pytz tzlocal`
   * git must be installed (online update)
 
@@ -50,13 +50,13 @@ Weather (for details see [CONFIGURATION])
   * Identify your language
   * Determine latitude and longitude
 
-If your commands in `myradio.ini` use `sudo`, you must configure it.
+If your commands in `myradio.ini` use `sudo`, you must configure it (`man sudoers`).
 
-As last part you need a `myradio.ini`:
+As last part you need a `myradio.ini`. This file is used by myradio to save the alarm settings. Ensure write access is available.
 
 ## CONFIGURATION
 
-It runs without an initial `myradio.ini` if you use the stable branch of kivy. Otherwise you must configure at least `monofont = RobotoMono-Regular` in section `[system]`. The alarm settings are updated in this file, too. Here follows a description of all configuration settings:
+It runs without an initial `myradio.ini` if you use the stable branch of kivy. Otherwise you must configure at least `monofont = RobotoMono-Regular` in section `[system]`. Here follows a description of all configuration settings:
 
     vi myradio.ini # you see the default values with comments here
 
@@ -178,8 +178,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
 
 ## WISH LIST 1
 
-  * Error messages for post_save_cmd
-  * Online update (git) for `myradio`
+  * Display error messages from external commands
 
 ## WISH LIST 2
 

@@ -51,7 +51,7 @@ If you read this using \fBman\fR: Screenshots are not converted by \fBronn\fR\. 
 It depends on your configuration\. Here is, what i have done for my Raspberry PI:
 .
 .IP "\(bu" 4
-Install Python and Kivy \fIhttps://github\.com/mrichardson23/rpi\-kivy\-screen\fR \- maybe all steps upto 15 at the time of writing this document
+Install Python and Kivy \fIhttps://github\.com/mrichardson23/rpi\-kivy\-screen\fR \- maybe all steps upto 15 at the time of writing this document; maybe try this newer documentation \fIhttp://kivy\.org/docs/installation/installation\-rpi\.html#manual\-installation\-on\-raspbian\-jessie\fR
 .
 .IP "\(bu" 4
 Install additional required Python packages \fBsudo pip install python\-forecastio pytz tzlocal\fR
@@ -79,13 +79,13 @@ Determine latitude and longitude
 .IP "" 0
 .
 .P
-If your commands in \fBmyradio\.ini\fR use \fBsudo\fR, you must configure it\.
+If your commands in \fBmyradio\.ini\fR use \fBsudo\fR, you must configure it (\fBman sudoers\fR)\.
 .
 .P
-As last part you need a \fBmyradio\.ini\fR:
+As last part you need a \fBmyradio\.ini\fR\. This file is used by myradio to save the alarm settings\. Ensure write access is available\.
 .
 .SH "CONFIGURATION"
-It runs without an initial \fBmyradio\.ini\fR if you use the stable branch of kivy\. Otherwise you must configure at least \fBmonofont = RobotoMono\-Regular\fR in section \fB[system]\fR\. The alarm settings are updated in this file, too\. Here follows a description of all configuration settings:
+It runs without an initial \fBmyradio\.ini\fR if you use the stable branch of kivy\. Otherwise you must configure at least \fBmonofont = RobotoMono\-Regular\fR in section \fB[system]\fR\. Here follows a description of all configuration settings:
 .
 .IP "" 4
 .
@@ -241,10 +241,7 @@ Problems arise if you scroll the listview with touch\. You can instead scroll it
 .SH "WISH LIST 1"
 .
 .IP "\(bu" 4
-Error messages for post_save_cmd
-.
-.IP "\(bu" 4
-Online update (git) for \fBmyradio\fR
+Display error messages from external commands
 .
 .IP "" 0
 .
