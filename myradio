@@ -53,18 +53,17 @@ from kivy.config import ConfigParser
 from re import match
 
 
-class ShowcaseScreen(Screen):
+class MyradioScreen(Screen):
     fullscreen = BooleanProperty(False)
     radius = NumericProperty(64)
 
     def add_widget(self, *args):
         if 'content' in self.ids:
             return self.ids.content.add_widget(*args)
-        return super(ShowcaseScreen, self).add_widget(*args)
+        return super(MyradioScreen, self).add_widget(*args)
 
-class ShowcaseApp(App):
+class MyradioApp(App):
 
-    # showcase base
     index = NumericProperty(-1)
     current_title = StringProperty()
     time = NumericProperty(0)
@@ -703,4 +702,4 @@ class ShowcaseApp(App):
         self.reboot()
 
 if __name__ == '__main__':
-    ShowcaseApp().run()
+    MyradioApp().run()
