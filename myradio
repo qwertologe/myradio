@@ -202,8 +202,6 @@ class MyradioApp(App):
         for i in range(7):
           self.weekday.append(date(2015,10,5+i).strftime('%A'))
 
-        Clock.schedule_interval(self._backlight_off, self.backlight_timeout)
-
         self.title = 'myRadio'
         Clock.schedule_interval(self._update_clock, 1 / 60.)
         self.screens = {}
@@ -215,6 +213,7 @@ class MyradioApp(App):
         self.update_alarm2()
         self.update_weather()
         self.update_all()
+        self.backlight_on()
 
         for idx,screen in enumerate(self.screen_names):
             self.root.ids.av.add_widget(
@@ -294,7 +293,6 @@ class MyradioApp(App):
             self.set_backlight(self.backlight_level)
             self.backlight_off = False
         Clock.schedule_interval(self._backlight_off, self.backlight_timeout)
-        return True
 
 
     def request_sound(self,path):
