@@ -281,6 +281,7 @@ MyradioScreen:
             size_hint: None, 0.5
             size: 48, 48
             background_color: [0,0,0,0]
+            on_touch_down: if self.collide_point(*args[1].pos): app._backlight_off(None)
 
             Image:
               source: 'data/icons/main/display-brightness.png'
