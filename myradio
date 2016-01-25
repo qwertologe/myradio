@@ -79,7 +79,6 @@ class Backlight:
         if percent > 0:
             self.percent = percent
             Clock.schedule_interval(self.off, self.timeout)
-        print self.percent
 
 
 class MyradioApp(App):
