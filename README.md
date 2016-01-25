@@ -114,6 +114,8 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     # number of seconds to wait until the display is turned off (brightness 0)
     # touching the screen will revert the brightness (if possible)
     backlight_timeout = 120
+    # normally a value in percent - but see [KNOWN ISSUES]
+    backlight_percent = 60
 
     [git]
     # should return true if update is available, otherwise false
@@ -150,6 +152,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     post_save_cmd =
     backlight_cmd = sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
     backlight_timeout = 120
+    backlight_percent = 60
 
     [git]
     check_update_cmd = remote=`git ls-remote $(git rev-parse --abbrev-ref @{u} | tr / " ")` || false && test $(git rev-parse HEAD) != $(echo "$remote" | cut -f1)

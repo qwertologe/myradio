@@ -62,6 +62,26 @@ class MyradioScreen(Screen):
             return self.ids.content.add_widget(*args)
         return super(MyradioScreen, self).add_widget(*args)
 
+
+class Backlight:
+    def __init__(self,percent,timeout,syscmd):
+        self.timeout = timeout
+        self.percent = percent
+        self.syscmd = syscmd
+        self.on()
+    def off(self,dt=None):
+        self.set_backlight(0)
+    def on(self):
+        self.set_backlight(self.percent)
+    def set_backlight(self,percent):
+        Clock.unschedule(self.off)
+        system(self.syscmd.format(int(percent)))
+        if percent > 0:
+            self.percent = percent
+            Clock.schedule_interval(self.off, self.timeout)
+        print self.percent
+
+
 class MyradioApp(App):
 
     index = NumericProperty(-1)
@@ -163,8 +183,8 @@ class MyradioApp(App):
     available_screens = (config.getdefault('system', 'screens', 'player,clock,alarm,weather,system').split(','))
     backlight_cmd = config.getdefault('system', 'backlight_cmd', 'sudo sh -c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"')
     backlight_timeout = int(config.getdefault('system', 'backlight_timeout', 120))
-    backlight_level = NumericProperty(60)
-    backlight_off = BooleanProperty(False)
+    backlight_percent = int(config.getdefault('system', 'backlight_percent', 60))
+    backlight = Backlight(backlight_percent,backlight_timeout,backlight_cmd)
 
     # git commands
     git_check_update_cmd = config.getdefault('git', 'check_update_cmd', 'remote=`git ls-remote $(git rev-parse --abbrev-ref @{u} | tr / " ")` || false && test $(git rev-parse HEAD) != $(echo "$remote" | cut -f1)')
@@ -213,7 +233,6 @@ class MyradioApp(App):
         self.update_alarm2()
         self.update_weather()
         self.update_all()
-        self.backlight_on()
 
         for idx,screen in enumerate(self.screen_names):
             self.root.ids.av.add_widget(
@@ -279,20 +298,6 @@ class MyradioApp(App):
                 self.pause_state = 'normal'
         else:
             self.pause_state = 'normal'
-
-
-    def _backlight_off(self,dt):
-        if not self.backlight_off:
-            self.backlight_off = True
-            self.set_backlight(0)
-
-
-    def backlight_on(self):
-        Clock.unschedule(self._backlight_off)
-        if self.backlight_off:
-            self.set_backlight(self.backlight_level)
-            self.backlight_off = False
-        Clock.schedule_interval(self._backlight_off, self.backlight_timeout)
 
 
     def request_sound(self,path):
@@ -660,19 +665,16 @@ class MyradioApp(App):
         if self.apikey:
             Clock.schedule_once(update_weather_steady)
 
-    def set_backlight(self,percent):
-        system(self.backlight_cmd.format(int(percent)))
-
     def save_config(self):
         system(self.post_save_cmd)
 
     def reboot(self):
-        self.backlight_on()
+        self.backlight.on()
         system(self.reboot_cmd)
         exit(0)
 
     def shutdown(self):
-        self.backlight_on()
+        self.backlight.on()
         system(self.shutdown_cmd)
         exit(0)
 
