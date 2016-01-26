@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "MYRADIO" "1" "December 2015" "" ""
+.TH "MYRADIO" "1" "January 2016" "" ""
 .
 .SH "NAME"
 \fBmyradio\fR \- An alarm clock with a simple audio player and weather forecast
@@ -126,6 +126,9 @@ dirs = $HOME
 # and will be used for alarm, too
 # it\'s up to you, to configure your system for these formats (gstreamer)
 formats = flac,mp3,ogg
+# The side from which we should shorten the file and directory names
+# possible values: left, center or right
+shorten_from = right
 
 [system]
 # for kivy >1\.9 stable you can use RobotoMono\-Regular
@@ -147,6 +150,8 @@ backlight_cmd = sudo sh \-c "echo $(({}*255/100)) >/sys/class/backlight/rpi_back
 # number of seconds to wait until the display is turned off (brightness 0)
 # touching the screen will revert the brightness (if possible)
 backlight_timeout = 120
+# normally a value in percent \- but see [KNOWN ISSUES]
+backlight_percent = 60
 
 [git]
 # should return true if update is available, otherwise false
@@ -174,6 +179,7 @@ language = en
 [audio]
 dirs = $HOME
 formats = flac,mp3,ogg
+shorten_from = right
 
 [system]
 monofont = DroidSansMono
@@ -183,6 +189,7 @@ shutdown = sudo /sbin/halt &
 post_save_cmd =
 backlight_cmd = sudo sh \-c "echo $(({}*255/100)) >/sys/class/backlight/rpi_backlight/brightness"
 backlight_timeout = 120
+backlight_percent = 60
 
 [git]
 check_update_cmd = remote=`git ls\-remote $(git rev\-parse \-\-abbrev\-ref @{u} | tr / " ")` || false && test $(git rev\-parse HEAD) != $(echo "$remote" | cut \-f1)

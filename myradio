@@ -160,6 +160,7 @@ class MyradioApp(App):
     sound = None
     pause_state = StringProperty('normal')
     last_set_audioprogress = None
+    shorten_from = StringProperty(config.getdefault('audio', 'shorten_from', 'right'))
 
     # alarm variables
     sleeptimer = NumericProperty(0)

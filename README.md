@@ -93,6 +93,9 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     # and will be used for alarm, too
     # it's up to you, to configure your system for these formats (gstreamer)
     formats = flac,mp3,ogg
+    # The side from which we should shorten the file and directory names
+    # possible values: left, center or right
+    shorten_from = right
 
     [system]
     # for kivy >1.9 stable you can use RobotoMono-Regular
@@ -143,6 +146,7 @@ It runs without an initial `myradio.ini` if you use the stable branch of kivy. O
     [audio]
     dirs = $HOME
     formats = flac,mp3,ogg
+    shorten_from = right
 
     [system]
     monofont = DroidSansMono
