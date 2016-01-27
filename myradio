@@ -418,7 +418,7 @@ class MyradioApp(App):
             if alarm_sound:
                 alarm_sound.play()
 
-            self.backlight_on()
+            self.backlight.on()
             snooze_seconds = self.snooze_seconds
 
             layout = BoxLayout(size_hint=(1,1))
