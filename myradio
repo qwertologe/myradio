@@ -64,20 +64,23 @@ class MyradioScreen(Screen):
 
 
 class Backlight:
-    def __init__(self,percent,timeout,syscmd):
+    def __init__(self,default_percent,timeout,syscmd):
         self.timeout = timeout
-        self.percent = percent
+        self.default_percent = default_percent
         self.syscmd = syscmd
+        self.percent = None
         self.on()
     def off(self,dt=None):
         self.set_backlight(0)
     def on(self):
-        self.set_backlight(self.percent)
+        self.set_backlight(self.default_percent)
     def set_backlight(self,percent):
         Clock.unschedule(self.off)
-        system(self.syscmd.format(int(percent)))
-        if percent > 0:
+        if self.percent != percent:
+            system(self.syscmd.format(int(percent)))
             self.percent = percent
+        if percent > 0:
+            self.default_percent = percent
             Clock.schedule_interval(self.off, self.timeout)
 
 
